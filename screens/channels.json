@@ -2,17 +2,24 @@
   "channels": [
     {
       "manifestPath": "/content/screens/employee-communications/locations/test-global.manifest.json",
-      "lastModified": "2023-04-19T09:57:33.000Z",
+      "lastModified": "2023-04-19T09:57:44.000Z",
       "externalId": "/content/screens/employee-communications/locations/test-global",
       "title": "test-global",
       "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/employee-communications/locations/test-global.html"
     },
     {
       "manifestPath": "/content/screens/ads/ad1.manifest.json",
-      "lastModified": "2023-04-19T09:57:33.000Z",
+      "lastModified": "2023-04-19T09:57:44.000Z",
       "externalId": "/content/screens/ads/ad1",
       "title": "test-global",
       "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/ads/ad1.html"
+    },
+    {
+      "manifestPath": "/content/screens/ads/ad2.manifest.json",
+      "lastModified": "2023-04-19T10:09:57.662Z",
+      "externalId": "/content/screens/ads/ad2",
+      "title": "test-global",
+      "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/ads/ad2.html"
     }
   ],
   "metadata": {
