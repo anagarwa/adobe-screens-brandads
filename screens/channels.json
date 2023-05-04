@@ -2,35 +2,35 @@
   "channels": [
     {
       "manifestPath": "/content/screens/employee-communications/locations/test-global.manifest.json",
-      "lastModified": "2023-04-24T10:36:13.000Z",
+      "lastModified": "2023-05-04T09:51:15.000Z",
       "externalId": "/content/screens/employee-communications/locations/test-global",
       "title": "test-global",
       "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/employee-communications/locations/test-global.html"
     },
     {
       "manifestPath": "/content/screens/ads/ad1.manifest.json",
-      "lastModified": "2023-04-25T13:49:17.687Z",
+      "lastModified": "2023-05-04T09:51:41.130Z",
       "externalId": "/content/screens/ads/ad1",
       "title": "test-global",
       "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/ads/ad1.html"
     },
     {
       "manifestPath": "/content/screens/ads/ad2.manifest.json",
-      "lastModified": "2023-04-25T13:49:18.076Z",
+      "lastModified": "2023-05-04T09:51:15.000Z",
       "externalId": "/content/screens/ads/ad2",
       "title": "test-global",
       "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/ads/ad2.html"
     },
     {
       "manifestPath": "/content/screens/ads/basketball/ad3.manifest.json",
-      "lastModified": "2023-04-25T13:49:18.448Z",
+      "lastModified": "2023-05-04T09:51:15.000Z",
       "externalId": "/content/screens/ads/basketball/ad3",
       "title": "test-global",
       "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/ads/basketball/ad3.html"
     },
     {
       "manifestPath": "/content/screens/ads/basketball/ad4.manifest.json",
-      "lastModified": "2023-04-25T13:49:18.833Z",
+      "lastModified": "2023-05-04T09:51:15.000Z",
       "externalId": "/content/screens/ads/basketball/ad4",
       "title": "test-global",
       "liveUrl": "https://main--adobe-screens-brandads--anagarwa.hlx.live/content/screens/ads/basketball/ad4.html"
