@@ -1,11 +1,16 @@
 {
-  "project": "FC Bayern",
+  "project": "Screen Brands",
   "plugins": [
     {
       "title": "Preflight",
       "id": "preflight",
-      "environments": ["dev", "preview", "live"],
+      "environments": ["dev", "preview", "live","edit"],
       "event": "preflight"
+    },
+    {
+      "id": "foo",
+      "title": "Foo",
+      "url": "/tools/sidekick/foo.html"
     }
   ]
 }
