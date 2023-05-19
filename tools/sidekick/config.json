@@ -2,10 +2,10 @@
   "project": "Screen Brands",
   "plugins": [
     {
-      "title": "Preflight",
-      "id": "preflight",
+      "title": "Pushevent",
+      "id": "pushevent",
       "environments": ["dev", "preview", "live","edit"],
-      "event": "preflight"
+      "event": "pushevent"
     },
     {
       "id": "foo1",
