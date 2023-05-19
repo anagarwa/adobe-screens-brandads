@@ -12,6 +12,12 @@
       "title": "Foo1",
       "event": "foo",
       "environments": ["dev", "preview", "live","edit"]
+    },
+    {
+      "id": "update-feed",
+      "title": "Update Feed",
+      "environments": [ "dev", "preview", "live","edit" ],
+      "event": "update-feed"
     }
   ]
 }
