@@ -8,8 +8,8 @@
       "event": "preflight"
     },
     {
-      "id": "foo",
-      "title": "Foo",
+      "id": "foo1",
+      "title": "Foo1",
       "event": "foo",
       "environments": ["dev", "preview", "live","edit"]
     }
