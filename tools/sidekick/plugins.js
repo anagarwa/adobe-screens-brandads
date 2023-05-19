@@ -1,7 +1,7 @@
 /* eslint-disable no-console, no-alert */
-import {
-  searchQueryIndexs,
-} from '../../scripts/scripts.js';
+// import {
+//   searchQueryIndexs,
+// } from '../../scripts/scripts.js';
 
 // function publishPage() {
 //   const publishButton = document.querySelector('helix-sidekick').shadowRoot.querySelector('.publish').firstElementChild;
