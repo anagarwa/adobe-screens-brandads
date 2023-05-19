@@ -70,6 +70,13 @@ async function loadEager(doc) {
     decorateMain(main);
     await waitForLCP(LCP_BLOCKS);
   }
+  if (document.querySelector('helix-sidekick')) {
+    import('../tools/sidekick/plugins.js');
+  } else {
+    document.addEventListener('helix-sidekick-ready', () => {
+      import('../tools/sidekick/plugins.js');
+    }, { once: true });
+  }
 }
 
 /**
