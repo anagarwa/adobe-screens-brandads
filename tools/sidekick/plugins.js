@@ -264,7 +264,7 @@ const updateFeed = async ({ detail }) => {
   }
   /* eslint-disable no-console */
   const feedUrl = document.querySelector('link[type="application/xml+atom"]')?.getAttribute('href');
-  if (feedUrl && window.blogIndex) {
+  //if (feedUrl && window.blogIndex) {
     const {
       connect,
       saveFile,
@@ -291,7 +291,7 @@ const updateFeed = async ({ detail }) => {
         feedBanner.write(`Failed to update feed ${feedPath}, please try again later`, 5);
       }
     });
-  }
+  //}
 };
 
 async function pushevent({ detail }) {
