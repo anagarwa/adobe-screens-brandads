@@ -1,0 +1,11 @@
+{
+  "project": "FC Bayern",
+  "plugins": [
+    {
+      "title": "Preflight",
+      "id": "preflight",
+      "environments": ["dev", "preview", "live"],
+      "event": "preflight"
+    }
+  ]
+}
