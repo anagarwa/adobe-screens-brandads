@@ -208,7 +208,7 @@ async function getFolder(folderPath) {
 // }
 
 async function createExcelFile(folderPath, fileName) {
-    validateConnection();
+    validateConnnection();
 
     const options = getRequestOption();
     options.headers.append('Content-Type', 'application/json');
