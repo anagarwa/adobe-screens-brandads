@@ -139,7 +139,7 @@ async function createFolder(folderPath) {
     options.method = sp.api.directory.create.method;
     options.body = JSON.stringify(sp.api.directory.create.payload);
 
-    const res = await fetch(`${sp.api.directory.create.baseURI}${folderPath}`, options);
+    const res = await fetch(`${sp.api.directory.create.baseURI}/${folderPath}`, options);
 
     if (res.ok) {
         return res.json();
