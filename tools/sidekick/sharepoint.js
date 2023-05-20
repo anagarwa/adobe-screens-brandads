@@ -159,7 +159,7 @@ async function getFolder(folderPath) {
 
     const res = await fetch(`${sp.api.driveUrl}/${folderPath}`, options);
     if (res.ok) {
-        return console.log(res.json());
+        return res.json();
     }
 
     throw new Error(`Could not get folder: ${folderPath}`);

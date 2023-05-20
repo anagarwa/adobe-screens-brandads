@@ -275,7 +275,9 @@ const updateFeed = async ({ detail }) => {
     // feedBanner.write('Please wait …');
     await connect(async () => {
       try {
-        checkAndUpdateExcelFile();
+        const folderResponse  = await checkAndUpdateExcelFile();
+        console.log(folderResponse);
+
         // const feedXml = new Blob([generateFeed()], { type: 'application/atom+xml' });
         // await saveFile(feedXml, feedPath);
         // let resp = await fetch(`https://admin.hlx.page/preview/${owner}/${repo}/${ref}${feedPath}`, { method: 'POST' });
