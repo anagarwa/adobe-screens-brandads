@@ -211,7 +211,7 @@ async function createNewExcelFile(filePath) {
 export async function checkAndUpdateExcelFile() {
     validateConnnection();
 
-    const folderPath = '/brandads/bar';
+    const folderPath = '/brandads';
     const filename = 'match.xlsx';
     const sheetName = 'defaultsheet';
     const searchText = 'push notification';
