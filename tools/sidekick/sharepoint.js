@@ -234,9 +234,9 @@ export async function checkAndUpdateExcelFile() {
     const sheetName = 'defaultsheet';
     const searchText = 'push notification';
     const entry = {
-        id: 'abc',
-        notify: 'event',
-        sent: 'yes'
+        id: 'abc2',
+        notify: 'event2',
+        sent: 'yes2'
     };
 
     const fileId = await getFileId(folderPath,filename);
