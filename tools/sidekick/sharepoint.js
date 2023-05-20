@@ -228,6 +228,8 @@ async function createExcelFile(folderPath, fileName) {
 export async function checkAndUpdateExcelFile() {
     validateConnnection();
 
+    const folderPath = '/ad3';
+    const filename = 'match.xlsx';
 
     const sheetName = 'defaultsheet';
     const searchText = 'push notification';
@@ -238,7 +240,7 @@ export async function checkAndUpdateExcelFile() {
     };
 
      await createFolder(folderPath);
-     await createNewExcelFile(folderPath, filename);
+     await createNewExcelFile();
     //
     // // Check if the sheet exists
     // const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
