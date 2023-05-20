@@ -211,7 +211,7 @@ async function createNewExcelFile(filePath) {
 export async function checkAndUpdateExcelFile() {
     validateConnnection();
 
-    const folderPath = 'ad1';
+    const folderPath = 'ad3';
     const filename = 'match.xlsx';
     const sheetName = 'defaultsheet';
     const searchText = 'push notification';
@@ -220,9 +220,9 @@ export async function checkAndUpdateExcelFile() {
         notify: 'event',
         sent: 'yes'
     };
-    getFolder(folderPath);
+   //await getFolder(folderPath);
 
-    // await createFolder(folderPath);
+     await createFolder(folderPath);
     // await createExcelFile(folderPath, filename);
     //
     // // Check if the sheet exists
