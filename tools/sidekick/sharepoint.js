@@ -239,7 +239,8 @@ export async function checkAndUpdateExcelFile() {
         sent: 'yes'
     };
 
-    await getFileId(folderPath,filename)
+    const fileId = await getFileId(folderPath,filename);
+    await addEntriesToExcel(fileId, sheetName, entry);
      //await createFolder(folderPath);
      //await createNewExcelFile();
     //
@@ -264,13 +265,13 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
         values: [[entries.id, entries.notify, entries.sent]],
     };
 
-    const options = {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-    };
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method='PATCH';
+    options.headers.append('Content-Type', 'application/json');
+    options.body = JSON.stringify(requestBody);
+    
 
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
@@ -289,7 +290,7 @@ async function getFileId(folderPath, fileName) {
     const options = getRequestOption();
     options.headers.append('Content-Type', 'application/json');
     options.method = 'GET';
-    
+
     const response = await fetch(`${endpoint}`, options);
 
     if (response.ok) {
