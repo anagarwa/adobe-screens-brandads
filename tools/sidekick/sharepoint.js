@@ -259,7 +259,7 @@ export async function checkAndUpdateExcelFile() {
 }
 
 async function addEntriesToExcel(fileId, sheetName, entries) {
-    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A1:C1')`;
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A2:C2')`;
 
     const requestBody = {
         values: [[entries.id, entries.notify, entries.sent]],
@@ -271,7 +271,7 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
     options.method='PATCH';
     options.headers.append('Content-Type', 'application/json');
     options.body = JSON.stringify(requestBody);
-    
+
 
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
