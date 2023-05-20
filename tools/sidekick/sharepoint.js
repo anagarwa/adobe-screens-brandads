@@ -166,52 +166,68 @@ async function getFolder(folderPath) {
 }
 
 
-async function createExcelFile(filePath) {
+// async function createExcelFile(filePath) {
+//     validateConnection();
+//
+//     const options = getRequestOption();
+//     options.method = 'GET';
+//
+//     const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${filePath}`, options);
+//
+//     if (res.ok) {
+//         // File already exists, return the existing file
+//         return res.json();
+//     } else if (res.status === 404) {
+//         // File not found, create a new Excel file
+//         return createNewExcelFile(filePath);
+//     }
+//
+//     throw new Error(`Could not check or create Excel file: ${filePath}`);
+// }
+//
+// async function createNewExcelFile(filePath) {
+//     validateConnection();
+//
+//     const options = getRequestOption();
+//     options.headers.append('Accept', 'application/json');
+//     options.headers.append('Content-Type', 'application/json');
+//     options.method = 'PUT';
+//     options.body = JSON.stringify({
+//         '@microsoft.graph.conflictBehavior': 'replace',
+//         name: 'match.xlsx',
+//         file: {},
+//     });
+//
+//     const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${filePath}:/content`, options);
+//
+//     if (res.ok) {
+//         return res.json();
+//     }
+//
+//     throw new Error(`Could not create Excel file: ${filePath}`);
+// }
+
+async function createExcelFile(folderPath, fileName) {
     validateConnection();
 
     const options = getRequestOption();
-    options.method = 'GET';
-
-    const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${filePath}`, options);
-
-    if (res.ok) {
-        // File already exists, return the existing file
-        return res.json();
-    } else if (res.status === 404) {
-        // File not found, create a new Excel file
-        return createNewExcelFile(filePath);
-    }
-
-    throw new Error(`Could not check or create Excel file: ${filePath}`);
-}
-
-async function createNewExcelFile(filePath) {
-    validateConnection();
-
-    const options = getRequestOption();
-    options.headers.append('Accept', 'application/json');
     options.headers.append('Content-Type', 'application/json');
     options.method = 'PUT';
-    options.body = JSON.stringify({
-        '@microsoft.graph.conflictBehavior': 'replace',
-        name: 'match.xlsx',
-        file: {},
-    });
+    options.body = JSON.stringify({});
 
-    const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${filePath}:/content`, options);
-
+    const res = await fetch(`${baseURI}${folderPath}/${fileName}:/workbook`, options);
     if (res.ok) {
-        return res.json();
+        return true;
+    } else {
+        throw new Error(`Could not create Excel file ${fileName} in folder ${folderPath}`);
     }
-
-    throw new Error(`Could not create Excel file: ${filePath}`);
 }
 
 
 export async function checkAndUpdateExcelFile() {
     validateConnnection();
 
-    const folderPath = 'ad3';
+    const folderPath = '/ad3';
     const filename = 'match.xlsx';
     const sheetName = 'defaultsheet';
     const searchText = 'push notification';
@@ -220,10 +236,9 @@ export async function checkAndUpdateExcelFile() {
         notify: 'event',
         sent: 'yes'
     };
-   //await getFolder(folderPath);
 
      await createFolder(folderPath);
-    // await createExcelFile(folderPath, filename);
+     await createExcelFile(folderPath, filename);
     //
     // // Check if the sheet exists
     // const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
