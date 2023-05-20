@@ -1,7 +1,11 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
 
+// const graphURL = 'https://graph.microsoft.com/v1.0';
+// const baseURI = 'https://graph.microsoft.com/v1.0/sites/adobe.sharepoint.com,7be4993e-8502-4600-834d-2eac96f9558e,1f8af71f-8465-4c46-8185-b0a6ce9b3c85/drive/root:/theblog';
+
 const graphURL = 'https://graph.microsoft.com/v1.0';
-const baseURI = 'https://graph.microsoft.com/v1.0/sites/adobe.sharepoint.com,7be4993e-8502-4600-834d-2eac96f9558e,1f8af71f-8465-4c46-8185-b0a6ce9b3c85/drive/root:/theblog';
+const baseURI = 'https://graph.microsoft.com/v1.0/me/drive/root:/';
+
 
 let connectAttempts = 0;
 let accessToken;
@@ -87,6 +91,17 @@ export async function connect(callback) {
             }
         }
     }
+
+    const options = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    };
+
+    const driveResponse = await fetch('https://graph.microsoft.com/v1.0/me/drive', options);
+    const driveData = await driveResponse.json();
+    const driveId = driveData.id;
+    console.log("driveId");
 }
 
 function validateConnnection() {
@@ -108,7 +123,24 @@ function getRequestOption() {
     };
 }
 
-async function createFolder(folder) {
+// async function createFolder(folder) {
+//     validateConnnection();
+//
+//     const options = getRequestOption();
+//     options.headers.append('Accept', 'application/json');
+//     options.headers.append('Content-Type', 'application/json');
+//     options.method = sp.api.directory.create.method;
+//     options.body = JSON.stringify(sp.api.directory.create.payload);
+//
+//     const res = await fetch(`${sp.api.directory.create.baseURI}${folder}`, options);
+//     if (res.ok) {
+//         return res.json();
+//     }
+//     throw new Error(`Could not create folder: ${folder}`);
+// }
+
+
+async function createFolder(folderPath) {
     validateConnnection();
 
     const options = getRequestOption();
@@ -117,12 +149,138 @@ async function createFolder(folder) {
     options.method = sp.api.directory.create.method;
     options.body = JSON.stringify(sp.api.directory.create.payload);
 
-    const res = await fetch(`${sp.api.directory.create.baseURI}${folder}`, options);
+    const res = await fetch(`${sp.api.directory.create.baseURI}${folderPath}`, options);
+
+    if (res.ok) {
+        return res.json();
+    } else if (res.status === 409) {
+        // Folder already exists, return the existing folder
+        return getFolder(folderPath);
+    }
+
+    throw new Error(`Could not create or get folder: ${folderPath}`);
+}
+
+async function getFolder(folderPath) {
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method = 'GET';
+
+    const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${folderPath}`, options);
     if (res.ok) {
         return res.json();
     }
-    throw new Error(`Could not create folder: ${folder}`);
+
+    throw new Error(`Could not get folder: ${folderPath}`);
 }
+
+
+async function createExcelFile(filePath) {
+    validateConnection();
+
+    const options = getRequestOption();
+    options.method = 'GET';
+
+    const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${filePath}`, options);
+
+    if (res.ok) {
+        // File already exists, return the existing file
+        return res.json();
+    } else if (res.status === 404) {
+        // File not found, create a new Excel file
+        return createNewExcelFile(filePath);
+    }
+
+    throw new Error(`Could not check or create Excel file: ${filePath}`);
+}
+
+async function createNewExcelFile(filePath) {
+    validateConnection();
+
+    const options = getRequestOption();
+    options.headers.append('Accept', 'application/json');
+    options.headers.append('Content-Type', 'application/json');
+    options.method = 'PUT';
+    options.body = JSON.stringify({
+        '@microsoft.graph.conflictBehavior': 'replace',
+        name: 'match.xlsx',
+        file: {},
+    });
+
+    const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${filePath}:/content`, options);
+
+    if (res.ok) {
+        return res.json();
+    }
+
+    throw new Error(`Could not create Excel file: ${filePath}`);
+}
+
+
+export async function checkAndUpdateExcelFile() {
+    validateConnnection();
+
+    const folderPath = '/foo/bar';
+    const filename = 'match.xlsx';
+    const sheetName = 'defaultsheet';
+    const searchText = 'push notification';
+    const entry = {
+        id: 'abc',
+        notify: 'event',
+        sent: 'yes'
+    };
+
+    await createFolder(folderPath);
+    await createExcelFile(folderPath, filename);
+
+    // Check if the sheet exists
+    const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
+    if (!sheetExists) {
+        // Create the sheet if it does not exist
+        await createSheet(folderPath, filename, sheetName);
+    }
+
+    // Find the row index containing the search text
+    const rowIndex = await findRowIndex(`${folderPath}/${filename}`, sheetName, searchText);
+
+    // Add the new entry below the found row or at the end
+    await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
+}
+
+export async function getDriveId() {
+    const publicClientApplication = new PublicClientApplication(sp.clientApp);
+
+    await publicClientApplication.loginPopup();
+
+    const account = publicClientApplication.getAllAccounts()[0];
+
+    const accessTokenRequest = {
+        scopes: ['files.readwrite', 'sites.readwrite.all'],
+        account,
+    };
+
+    try {
+        const res = await publicClientApplication.acquireTokenSilent(accessTokenRequest);
+        const accessToken = res.accessToken;
+
+        const options = {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        };
+
+        const driveResponse = await fetch('https://graph.microsoft.com/v1.0/me/drive', options);
+        const driveData = await driveResponse.json();
+        const driveId = driveData.id;
+
+        return driveId;
+    } catch (error) {
+        throw new Error('Failed to retrieve drive ID');
+    }
+}
+
+
 
 export async function saveFile(file, dest) {
     validateConnnection();
