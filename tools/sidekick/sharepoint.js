@@ -303,7 +303,7 @@ async function getFileId(folderPath, fileName) {
 }
 
 async function findTextInExcel(fileId, sheetName, searchText) {
-    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/search(q='${searchText}')`;
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/search(q='${encodeURIComponent(searchText)}')`;
     validateConnnection();
 
     const options = getRequestOption();
