@@ -239,11 +239,12 @@ export async function checkAndUpdateExcelFile() {
         sent: 'yes'
     };
 
-     await createFolder(folderPath);
-     await createNewExcelFile();
+    await getFileId(folderPath,filename)
+     //await createFolder(folderPath);
+     //await createNewExcelFile();
     //
     // // Check if the sheet exists
-    // const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
+    //const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
     // if (!sheetExists) {
     //     // Create the sheet if it does not exist
     //     await createSheet(folderPath, filename, sheetName);
@@ -254,6 +255,50 @@ export async function checkAndUpdateExcelFile() {
     //
     // // Add the new entry below the found row or at the end
     // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
+}
+
+async function addEntriesToExcel(fileId, sheetName, entries) {
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A1:C1')`;
+
+    const requestBody = {
+        values: [[entries.id, entries.notify, entries.sent]],
+    };
+
+    const options = {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+    };
+
+    const response = await fetch(`${graphURL}${endpoint}`, options);
+
+    if (response.ok) {
+        return response.json();
+    }
+
+    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
+}
+
+async function getFileId(folderPath, fileName) {
+    const endpoint = `/drives/${driveId}/root:${folderPath}/${fileName}`;
+
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    const response = await fetch(`${graphURL}${endpoint}`, options);
+
+    if (response.ok) {
+        const file = await response.json();
+        return file.id;
+    }
+
+    throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
 }
 
 export async function getDriveId() {
@@ -330,6 +375,53 @@ export async function saveFile(file, dest) {
         }
     }
     throw new Error(`Could not upload file ${dest}`);
+}
+
+async function findRowIndex(sheetName, searchText) {
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method = 'GET';
+
+    const res = await fetch(`${sp.api.file.get.baseURI}${sheetName}:/workbook/tables/Table1/rows`, options);
+    if (res.ok) {
+        const json = await res.json();
+        const rows = json.value;
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const cellValues = row.values.map(cell => cell.text);
+
+            if (cellValues.includes(searchText)) {
+                return i + 1; // Add 1 to convert from zero-based index to one-based index (Excel row index starts from 1)
+            }
+        }
+    }
+    return -1; // Return -1 if the search text is not found in any row
+}
+
+async function addNotificationEntry(sheetName, searchText, entry) {
+    validateConnnection();
+
+    const rowIndex = await findRowIndex(sheetName, searchText);
+    const insertRowIndex = rowIndex !== -1 ? rowIndex + 1 : -1; // Insert row below the found row or at the end
+
+    const options = getRequestOption();
+    options.headers.append('Accept', 'application/json');
+    options.headers.append('Content-Type', 'application/json');
+    options.method = 'POST';
+    options.body = JSON.stringify({
+        index: insertRowIndex,
+        values: [
+            [entry.id, entry.notify, entry.sent]
+        ]
+    });
+
+    const res = await fetch(`${sp.api.file.get.baseURI}${sheetName}:/workbook/tables/Table1/rows/add`, options);
+    if (res.ok) {
+        return res.json();
+    }
+    throw new Error(`Could not add notification entry to the sheet: ${sheetName}`);
 }
 
 export async function test() {
