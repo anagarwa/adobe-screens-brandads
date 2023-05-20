@@ -189,7 +189,7 @@ async function createNewExcelFile(folderPath, fileName) {
     validateConnnection();
 
     const options = getRequestOption();
-    options.headers.append('Accept', 'application/json');
+    //options.headers.append('Accept', 'application/json');
     //options.headers.append('Content-Type', 'application/json');
     options.headers.append('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     options.method = 'PUT';
