@@ -258,37 +258,38 @@ const generateFeed = (
 const hasFeed = () => !!document.querySelector('link[type="application/xml+atom"]');
 
 const updateFeed = async ({ detail }) => {
-  const feedBanner = new BlogSidekickBanner('update-feed');
-  if (!hasFeed) {
-    feedBanner.write('No feed defined for this page', 5);
-  }
-  /* eslint-disable no-console */
-  const feedUrl = document.querySelector('link[type="application/xml+atom"]')?.getAttribute('href');
+  // const feedBanner = new BlogSidekickBanner('update-feed');
+  // if (!hasFeed) {
+  //   feedBanner.write('No feed defined for this page', 5);
+  // }
+  // /* eslint-disable no-console */
+  // const feedUrl = document.querySelector('link[type="application/xml+atom"]')?.getAttribute('href');
   //if (feedUrl && window.blogIndex) {
     const {
       connect,
-      saveFile,
+      checkAndUpdateExcelFile,
     } = await import(`${window.location.origin}/tools/sidekick/sharepoint.js`);
-    const { owner, repo, ref } = detail.data.config;
-    const feedPath = new URL(feedUrl, 'https://blog.adobe.com').pathname;
-    console.log(`Updating feed ${feedPath}`);
-    feedBanner.write('Please wait …');
+    // const { owner, repo, ref } = detail.data.config;
+    // const feedPath = new URL(feedUrl, 'https://blog.adobe.com').pathname;
+    // console.log(`Updating feed ${feedPath}`);
+    // feedBanner.write('Please wait …');
     await connect(async () => {
       try {
-        const feedXml = new Blob([generateFeed()], { type: 'application/atom+xml' });
-        await saveFile(feedXml, feedPath);
-        let resp = await fetch(`https://admin.hlx.page/preview/${owner}/${repo}/${ref}${feedPath}`, { method: 'POST' });
-        if (!resp.ok) {
-          throw new Error(`Failed to update preview for ${feedPath}`);
-        }
-        resp = await fetch(`https://admin.hlx.page/live/${owner}/${repo}/${ref}${feedPath}`, { method: 'POST' });
-        if (!resp.ok) {
-          throw new Error(`Failed to publish ${feedPath}`);
-        }
-        feedBanner.write(`Feed <a href="${feedUrl}" target="_blank">${feedPath}</a> updated`, 5);
+        checkAndUpdateExcelFile();
+        // const feedXml = new Blob([generateFeed()], { type: 'application/atom+xml' });
+        // await saveFile(feedXml, feedPath);
+        // let resp = await fetch(`https://admin.hlx.page/preview/${owner}/${repo}/${ref}${feedPath}`, { method: 'POST' });
+        // if (!resp.ok) {
+        //   throw new Error(`Failed to update preview for ${feedPath}`);
+        // }
+        // resp = await fetch(`https://admin.hlx.page/live/${owner}/${repo}/${ref}${feedPath}`, { method: 'POST' });
+        // if (!resp.ok) {
+        //   throw new Error(`Failed to publish ${feedPath}`);
+        // }
+        // feedBanner.write(`Feed <a href="${feedUrl}" target="_blank">${feedPath}</a> updated`, 5);
       } catch (e) {
         console.error(e);
-        feedBanner.write(`Failed to update feed ${feedPath}, please try again later`, 5);
+//        feedBanner.write(`Failed to update feed ${feedPath}, please try again later`, 5);
       }
     });
   //}
