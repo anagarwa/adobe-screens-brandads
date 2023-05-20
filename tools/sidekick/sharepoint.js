@@ -185,21 +185,21 @@ async function getFolder(folderPath) {
 //     throw new Error(`Could not check or create Excel file: ${filePath}`);
 // }
 //
-async function createNewExcelFile(folderPath, fileName) {
+async function createNewExcelFile() {
     validateConnnection();
+    const folderPath = '/ad3';
+    const filename = 'match.xlsx';
 
     const options = getRequestOption();
-    //options.headers.append('Accept', 'application/json');
-    //options.headers.append('Content-Type', 'application/json');
     options.headers.append('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     options.method = 'PUT';
     options.body = JSON.stringify({
         '@microsoft.graph.conflictBehavior': 'replace',
-        name: fileName,
+        name: filename,
         file: {},
     });
 
-    const res = await fetch(`${baseURI}${folderPath}/${fileName}:/content`, options);
+    const res = await fetch(`${baseURI}${folderPath}/${filename}:/content`, options);
 
     if (res.ok) {
         return res.json();
@@ -228,8 +228,7 @@ async function createExcelFile(folderPath, fileName) {
 export async function checkAndUpdateExcelFile() {
     validateConnnection();
 
-    const folderPath = '/ad3';
-    const filename = 'match.xlsx';
+
     const sheetName = 'defaultsheet';
     const searchText = 'push notification';
     const entry = {
