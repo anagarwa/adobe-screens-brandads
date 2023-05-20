@@ -194,7 +194,7 @@ async function createNewExcelFile(folderPath, fileName) {
     options.method = 'PUT';
     options.body = JSON.stringify({
         '@microsoft.graph.conflictBehavior': 'replace',
-        name: 'match.xlsx',
+        name: fileName,
         file: {},
     });
 
