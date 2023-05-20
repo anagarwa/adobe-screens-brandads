@@ -4,7 +4,7 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 // const baseURI = 'https://graph.microsoft.com/v1.0/sites/adobe.sharepoint.com,7be4993e-8502-4600-834d-2eac96f9558e,1f8af71f-8465-4c46-8185-b0a6ce9b3c85/drive/root:/theblog';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
-const baseURI = `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1`;
+const baseURI = `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/brandads/bar`;
 const driveId = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
 
 let connectAttempts = 0;
@@ -220,22 +220,23 @@ export async function checkAndUpdateExcelFile() {
         notify: 'event',
         sent: 'yes'
     };
+    getFolder(folderPath);
 
-    await createFolder(folderPath);
-    await createExcelFile(folderPath, filename);
-
-    // Check if the sheet exists
-    const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
-    if (!sheetExists) {
-        // Create the sheet if it does not exist
-        await createSheet(folderPath, filename, sheetName);
-    }
-
-    // Find the row index containing the search text
-    const rowIndex = await findRowIndex(`${folderPath}/${filename}`, sheetName, searchText);
-
-    // Add the new entry below the found row or at the end
-    await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
+    // await createFolder(folderPath);
+    // await createExcelFile(folderPath, filename);
+    //
+    // // Check if the sheet exists
+    // const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
+    // if (!sheetExists) {
+    //     // Create the sheet if it does not exist
+    //     await createSheet(folderPath, filename, sheetName);
+    // }
+    //
+    // // Find the row index containing the search text
+    // const rowIndex = await findRowIndex(`${folderPath}/${filename}`, sheetName, searchText);
+    //
+    // // Add the new entry below the found row or at the end
+    // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
 }
 
 export async function getDriveId() {
