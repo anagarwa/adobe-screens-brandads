@@ -282,8 +282,7 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
 }
 
 async function getFileId(folderPath, fileName) {
-    const endpoint = `/drives/${driveId}/root:${folderPath}/${fileName}`;
-
+    const endpoint = `${sp.api.directory.create.baseURI}${folderPath}/${fileName}`;
     const options = {
         method: 'GET',
         headers: {
