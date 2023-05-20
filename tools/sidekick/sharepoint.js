@@ -190,7 +190,8 @@ async function createNewExcelFile(folderPath, fileName) {
 
     const options = getRequestOption();
     options.headers.append('Accept', 'application/json');
-    options.headers.append('Content-Type', 'application/json');
+    //options.headers.append('Content-Type', 'application/json');
+    options.headers.append('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     options.method = 'PUT';
     options.body = JSON.stringify({
         '@microsoft.graph.conflictBehavior': 'replace',
