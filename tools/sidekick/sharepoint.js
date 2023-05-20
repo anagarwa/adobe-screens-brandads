@@ -283,13 +283,13 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
 
 async function getFileId(folderPath, fileName) {
     const endpoint = `${sp.api.directory.create.baseURI}${folderPath}/${fileName}`;
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
 
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.headers.append('Content-Type', 'application/json');
+    options.method = 'GET';
+    
     const response = await fetch(`${endpoint}`, options);
 
     if (response.ok) {
