@@ -290,7 +290,7 @@ async function getFileId(folderPath, fileName) {
         },
     };
 
-    const response = await fetch(`${graphURL}${endpoint}`, options);
+    const response = await fetch(`${endpoint}`, options);
 
     if (response.ok) {
         const file = await response.json();
