@@ -232,17 +232,28 @@ export async function checkAndUpdateExcelFile() {
     const filename = 'match.xlsx';
 
     const sheetName = 'defaultsheet';
-    const searchText = 'push notification';
+    //const searchText = 'push notification';
     const entry = {
         id: 'abc2',
         notify: 'event2',
         sent: 'yes2'
     };
+    const entries = [{
+        id: 'abc3',
+        notify: 'event3',
+        sent: 'yes3'
+    },
+        {
+            id: 'abc4',
+            notify: 'event4',
+            sent: 'yes4'
+        },
+    ];
 
     const fileId = await getFileId(folderPath,filename);
     //const sheetId = await getSheetId(fileId, sheetName);
-    //await addEntriesToExcel(fileId, sheetName, entry);
-    await addEntriesToExcel1(fileId, sheetName, entry);
+    await addEntriesToExcel(fileId, sheetName, entry);
+    //await addEntriesToExcel1(fileId, sheetName, entry);
     //await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
      //await createNewExcelFile();
@@ -262,7 +273,7 @@ export async function checkAndUpdateExcelFile() {
 }
 
 async function addEntriesToExcel(fileId, sheetName, entries) {
-    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A2:C2')`;
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A3:C4')`;
 
     const requestBody = {
         values: [[entries.id, entries.notify, entries.sent]],
