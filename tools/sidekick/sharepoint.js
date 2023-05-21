@@ -304,10 +304,30 @@ async function addEntriesToExcel1(fileId, sheetName, entries) {
 
     if (response.ok) {
         const searchResults = await response.json();
-        const firstResult = searchResults.value[0]; // Assuming there's at least one match
-        const rowNumber = firstResult.rowIndex;
-        const columnNumber = firstResult.columnIndex;
-        console.log(firstResult);
+
+        // Find text in the 2D array
+        const searchText = 'abc2';
+        let found = false;
+        let rowIndex, columnIndex;
+
+        for (let row = 0; row < searchResults.values.length; row++) {
+            //for (let col = 0; col < searchResults.values[row].length; col++) {
+                if (searchResults.values[row][0] === searchText) {
+                    rowIndex = row + 1; // Adding 1 to row and column indices since Excel starts from 1
+                    found = true;
+                    break;
+                }
+            //}
+            if (found) {
+                break;
+            }
+        }
+
+        if (found) {
+            console.log(`Text '${searchText}' found at Row: ${rowIndex}, Column: 0`);
+        } else {
+            console.log(`Text '${searchText}' not found in the array.`);
+        }
     }
 
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
