@@ -240,6 +240,7 @@ export async function checkAndUpdateExcelFile() {
     };
 
     const fileId = await getFileId(folderPath,filename);
+    const sheetId = await getSheetId(fileId, sheetName);
     //await addEntriesToExcel(fileId, sheetName, entry);
     await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
@@ -301,6 +302,32 @@ async function getFileId(folderPath, fileName) {
 
     throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
 }
+
+async function getSheetId(workbookId, sheetName) {
+//    const endpoint = `${sp.api.directory.create.baseURI}${folderPath}/${fileName}`;
+    const endpoint =`/drives/${driveId}/items/${workbookId}/workbook/worksheets`;
+
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.headers.append('Content-Type', 'application/json');
+    options.method = 'GET';
+
+    const response = await fetch(`${graphURL}${endpoint}`, options);
+
+    if (response.ok) {
+        const worksheets = await response.json();
+        const worksheet = worksheets.value.find(w => w.name === sheetName);
+        if (!worksheet) {
+            console.error(`Worksheet "${sheetName}" not found.`);
+            return;
+        }
+        //return file.id;
+    }
+
+    throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
+}
+
 
 // async function findTextInExcel(fileId, sheetName, searchText) {
 // //    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/search(q='${encodeURIComponent(searchText)}')`;
