@@ -302,24 +302,56 @@ async function getFileId(folderPath, fileName) {
     throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
 }
 
+// async function findTextInExcel(fileId, sheetName, searchText) {
+// //    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/search(q='${encodeURIComponent(searchText)}')`;
+//     var endpointUrl = 'https://graph.microsoft.com/v1.0/me/drive/items/' + fileId + '/workbook/worksheets/' + sheetName + '/range(address=' + sheetName + '!A1:Z1000)?$search="' + searchText + '"';
+//
+//     validateConnnection();
+//
+//     const options = getRequestOption();
+//     options.method='GET';
+//     options.headers.append('Content-Type', 'application/json');
+//
+//
+// //    const response = await fetch(`${graphURL}${endpoint}`, options);
+//     const response = await fetch(`${endpointUrl}`,options);
+//     if (response.ok) {
+//         const searchResults = await response.json();
+//         const firstResult = searchResults.value[0]; // Assuming there's at least one match
+//
+//         // Retrieve the row and column numbers of the first match
+//         const rowNumber = firstResult.rowIndex;
+//         const columnNumber = firstResult.columnIndex;
+//
+//         return { rowNumber, columnNumber };
+//     }
+//
+//     throw new Error(`Could not find the specified text. Status: ${response.status}`);
+// }
+
 async function findTextInExcel(fileId, sheetName, searchText) {
-    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/search(q='${encodeURIComponent(searchText)}')`;
-    validateConnnection();
+    const endpointUrl = `https://graph.microsoft.com/v1.0/me/drive/items/${fileId}/workbook/worksheets('${sheetName}')/usedRange/find(values="${encodeURIComponent(searchText)}")`;
 
-    const options = getRequestOption();
-    options.method='GET';
-    options.headers.append('Content-Type', 'application/json');
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`, // Replace accessToken with your valid access token
+        },
+    };
+    // validateConnnection();
+    // const options = getRequestOption();
+    // options.method='GET';
+    // options.headers.append('Content-Type', 'application/json');
 
-
-    const response = await fetch(`${graphURL}${endpoint}`, options);
-
+    const response = await fetch(endpointUrl, options);
     if (response.ok) {
         const searchResults = await response.json();
         const firstResult = searchResults.value[0]; // Assuming there's at least one match
 
         // Retrieve the row and column numbers of the first match
-        const rowNumber = firstResult.rowIndex;
-        const columnNumber = firstResult.columnIndex;
+        const rowNumber = firstResult.row;
+        const columnNumber = firstResult.column;
 
         return { rowNumber, columnNumber };
     }
