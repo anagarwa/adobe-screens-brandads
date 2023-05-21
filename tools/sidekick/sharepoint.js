@@ -242,7 +242,8 @@ export async function checkAndUpdateExcelFile() {
     const fileId = await getFileId(folderPath,filename);
     //const sheetId = await getSheetId(fileId, sheetName);
     //await addEntriesToExcel(fileId, sheetName, entry);
-    await findTextInExcel(fileId, sheetName, entry.id);
+    await addEntriesToExcel1(fileId, sheetName, entry);
+    //await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
      //await createNewExcelFile();
     //
@@ -284,6 +285,29 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
 
+async function addEntriesToExcel1(fileId, sheetName, entries) {
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A2:C2')`;
+
+    // const requestBody = {
+    //     values: [[entries.id, entries.notify, entries.sent]],
+    // };
+
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method='GET';
+    options.headers.append('Content-Type', 'application/json');
+    //options.body = JSON.stringify(requestBody);
+
+
+    const response = await fetch(`${graphURL}${endpoint}`, options);
+
+    if (response.ok) {
+        return response.json();
+    }
+
+    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
+}
 async function getFileId(folderPath, fileName) {
     const endpoint = `${sp.api.directory.create.baseURI}${folderPath}/${fileName}`;
 
