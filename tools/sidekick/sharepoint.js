@@ -286,7 +286,7 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
 }
 
 async function addEntriesToExcel1(fileId, sheetName, entries) {
-    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A2:C2')`;
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A1:C2')`;
 
     // const requestBody = {
     //     values: [[entries.id, entries.notify, entries.sent]],
@@ -304,7 +304,10 @@ async function addEntriesToExcel1(fileId, sheetName, entries) {
 
     if (response.ok) {
         const searchResults = await response.json();
-        console.log(searchResults);
+        const firstResult = searchResults.value[0]; // Assuming there's at least one match
+        const rowNumber = firstResult.rowIndex;
+        const columnNumber = firstResult.columnIndex;
+        console.log(firstResult);
     }
 
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
@@ -369,11 +372,8 @@ async function getSheetId(workbookId, sheetName) {
 //     const response = await fetch(`${endpointUrl}`,options);
 //     if (response.ok) {
 //         const searchResults = await response.json();
-//         const firstResult = searchResults.value[0]; // Assuming there's at least one match
-//
-//         // Retrieve the row and column numbers of the first match
-//         const rowNumber = firstResult.rowIndex;
-//         const columnNumber = firstResult.columnIndex;
+
+
 //
 //         return { rowNumber, columnNumber };
 //     }
