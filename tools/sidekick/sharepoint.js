@@ -314,6 +314,7 @@ async function addEntriesToExcel1(fileId, sheetName, entries) {
             //for (let col = 0; col < searchResults.values[row].length; col++) {
                 if (searchResults.values[row][0] === searchText) {
                     rowIndex = row + 1; // Adding 1 to row and column indices since Excel starts from 1
+                    columnIndex = 0 + 1;
                     found = true;
                     break;
                 }
@@ -324,10 +325,11 @@ async function addEntriesToExcel1(fileId, sheetName, entries) {
         }
 
         if (found) {
-            console.log(`Text '${searchText}' found at Row: ${rowIndex}, Column: 0`);
+            console.log(`Text '${searchText}' found at Row: ${rowIndex}, Column: ${columnIndex}`);
         } else {
             console.log(`Text '${searchText}' not found in the array.`);
         }
+        return;
     }
 
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
