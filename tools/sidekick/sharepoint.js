@@ -242,7 +242,7 @@ export async function checkAndUpdateExcelFile() {
     const fileId = await getFileId(folderPath,filename);
     //const sheetId = await getSheetId(fileId, sheetName);
     //await addEntriesToExcel(fileId, sheetName, entry);
-    await findTextInExcel(fileId, entry.id);
+    await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
      //await createNewExcelFile();
     //
@@ -356,9 +356,12 @@ async function getSheetId(workbookId, sheetName) {
 //     throw new Error(`Could not find the specified text. Status: ${response.status}`);
 // }
 
-async function findTextInExcel(fileId, searchText) {
-    const endpointUrl = `/drives/${driveId}/items/${fileId}/workbook/worksheets/00000000-0001-0000-0000-000000000000/usedRange/search(q='${searchText}')`;
+async function findTextInExcel(fileId,sheetName, searchText) {
+    //const endpointUrl = `/drives/${driveId}/items/${fileId}/workbook/worksheets/00000000-0001-0000-0000-000000000000/usedRange/search(q='${searchText}')`;
     //const endpointUrl = `https://graph.microsoft.com/v1.0/me/drive/items/${fileId}/workbook/worksheets('${sheetName}')/usedRange/find(values="${encodeURIComponent(searchText)}")`;
+
+    const range = `${sheetName}!A1:C2`;
+    const endpointUrl = `/drive/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='${range}')?$expand=values`;
 
     validateConnnection();
     const options = getRequestOption();
