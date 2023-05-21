@@ -303,7 +303,8 @@ async function addEntriesToExcel1(fileId, sheetName, entries) {
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
     if (response.ok) {
-        return response.json();
+        const searchResults = await response.json();
+        console.log(searchResults);
     }
 
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
