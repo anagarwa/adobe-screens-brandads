@@ -242,7 +242,7 @@ export async function checkAndUpdateExcelFile() {
     const fileId = await getFileId(folderPath,filename);
     const sheetId = await getSheetId(fileId, sheetName);
     //await addEntriesToExcel(fileId, sheetName, entry);
-    await findTextInExcel(fileId, sheetName, entry.id);
+    await findTextInExcel(fileId, sheetId, entry.id);
      //await createFolder(folderPath);
      //await createNewExcelFile();
     //
@@ -322,7 +322,7 @@ async function getSheetId(workbookId, sheetName) {
             console.error(`Worksheet "${sheetName}" not found.`);
             return;
         }
-        //return file.id;
+        return worksheet.id;
     }
 
     throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
@@ -356,22 +356,16 @@ async function getSheetId(workbookId, sheetName) {
 //     throw new Error(`Could not find the specified text. Status: ${response.status}`);
 // }
 
-async function findTextInExcel(fileId, sheetName, searchText) {
-    const endpointUrl = `https://graph.microsoft.com/v1.0/me/drive/items/${fileId}/workbook/worksheets('${sheetName}')/usedRange/find(values="${encodeURIComponent(searchText)}")`;
+async function findTextInExcel(fileId, sheetId, searchText) {
+    const endpointUrl = `/drives/${driveId}/items/${fileId}/workbook/worksheets/${sheetId}/usedRange/search(q='${searchText}')`;
+    //const endpointUrl = `https://graph.microsoft.com/v1.0/me/drive/items/${fileId}/workbook/worksheets('${sheetName}')/usedRange/find(values="${encodeURIComponent(searchText)}")`;
 
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`, // Replace accessToken with your valid access token
-        },
-    };
-    // validateConnnection();
-    // const options = getRequestOption();
-    // options.method='GET';
-    // options.headers.append('Content-Type', 'application/json');
+    validateConnnection();
+    const options = getRequestOption();
+    options.method='GET';
+    options.headers.append('Content-Type', 'application/json');
 
-    const response = await fetch(endpointUrl, options);
+    const response = await fetch(`${graphURL}${endpointUrl}`, options);
     if (response.ok) {
         const searchResults = await response.json();
         const firstResult = searchResults.value[0]; // Assuming there's at least one match
