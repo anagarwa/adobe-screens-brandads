@@ -275,8 +275,12 @@ export async function checkAndUpdateExcelFile() {
 async function addEntriesToExcel(fileId, sheetName, entries) {
     const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A3:C4')`;
 
+    // const requestBody = {
+    //     values: [[entries.id, entries.notify, entries.sent]],
+    // };
+
     const requestBody = {
-        values: [[entries.id, entries.notify, entries.sent]],
+        values: entries.map((entry) => [entry.id, entry.notify, entry.sent]),
     };
 
     validateConnnection();
