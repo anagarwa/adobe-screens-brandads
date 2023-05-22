@@ -229,7 +229,6 @@ export async function checkAndUpdateExcelFile() {
 
     const folderPath = '/ad3';
     const filename = 'match.xlsx';
-    const docName = `sampledoc.docx`;
 
     const sheetName = 'defaultsheet';
     //const searchText = 'push notification';
@@ -250,12 +249,10 @@ export async function checkAndUpdateExcelFile() {
         },
     ];
 
-    //const fileId = await getFileId(folderPath,filename);
-    const documentId = await getFileId(folderPath,docName);
+    const fileId = await getFileId(folderPath,filename);
     //const sheetId = await getSheetId(fileId, sheetName);
-    //await addEntriesToExcel(fileId, sheetName, entries);
+    await addEntriesToExcel(fileId, sheetName, entries);
     const siteId = await getSiteId();
-    const dataResponse = await updateDocument(siteId, documentId);
     //await findText(fileId, sheetName, entry);
     //await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
@@ -273,30 +270,6 @@ export async function checkAndUpdateExcelFile() {
     //
     // // Add the new entry below the found row or at the end
     // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
-}
-
-async function updateDocument(sitesid, documentid) {
-    const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/items/${documentid}/content`;
-
-    validateConnnection();
-
-    const updateContent = 'New document content';
-    const options = getRequestOption();
-    options.method='PATCH';
-    options.headers.append('Content-Type', 'application/json');
-    options.body = SON.stringify({
-        content: updateContent,
-    });
-
-
-    const response = await fetch(`${endpoint}`, options);
-
-    if (response.ok) {
-        const data = await response.json();
-        return data;
-    }
-
-    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
 
 
