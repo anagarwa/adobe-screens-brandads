@@ -256,8 +256,9 @@ export async function checkAndUpdateExcelFile() {
     //await addEntriesToExcel(fileId, sheetName, entries);
     const siteId = await getSiteId();
     //const dataResponse = await updateDocument(siteId, documentId);
+    const rewriteResponse = await rewriteDocument(siteId, documentId);
     //const searchResponse = await searchdocument(siteId, documentId);
-    const downlodedFile = await downloadUploadDocument(siteId, documentId);
+//    const downlodedFile = await downloadUploadDocument(siteId, documentId);
     //await findText(fileId, sheetName, entry);
     //await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
@@ -323,6 +324,28 @@ async function downloadUploadDocument(sitesid, documentid) {
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
 
+async function rewriteDocument(sitesid, documentid) {
+    const updatedContent = 'This is the updated content of the document.';
+    const endpoint = `https://graph.microsoft.com/v1.0/me/drive/items/${documentid}/contentt`;
+
+    validateConnnection();
+
+    const updateContent = 'New document content';
+    const options = getRequestOption();
+    options.method='PATCH';
+    options.headers.append('Content-Type', 'text/plain');
+    options.body = updatedContent
+
+
+    const response = await fetch(`${endpoint}`, options);
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
+}
 async function updateDocument(sitesid, documentid) {
     const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/items/${documentid}/content`;
 
