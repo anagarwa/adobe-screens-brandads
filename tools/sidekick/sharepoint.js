@@ -354,6 +354,7 @@ async function updateDocument(sitesid, documentid) {
     const options = getRequestOption();
     options.method='PATCH';
     options.headers.append('Content-Type', 'application/json');
+    options.headers.append('Origin',window.location.origin);
     options.body = JSON.stringify({
         content: updateContent,
     });
