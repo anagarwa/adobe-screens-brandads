@@ -6,7 +6,7 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/brandads`;
 const driveId = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
-
+const siteBaseUrl =
 let connectAttempts = 0;
 let accessToken;
 
@@ -253,7 +253,8 @@ export async function checkAndUpdateExcelFile() {
     const fileId = await getFileId(folderPath,filename);
     //const sheetId = await getSheetId(fileId, sheetName);
     await addEntriesToExcel(fileId, sheetName, entries);
-    //await addEntriesToExcel1(fileId, sheetName, entry);
+    const siteId = await getSiteId();
+    //await findText(fileId, sheetName, entry);
     //await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
      //await createNewExcelFile();
@@ -271,6 +272,7 @@ export async function checkAndUpdateExcelFile() {
     // // Add the new entry below the found row or at the end
     // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
 }
+
 
 async function addEntriesToExcel(fileId, sheetName, entries) {
     const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A3:C4')`;
@@ -300,7 +302,7 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
 
-async function addEntriesToExcel1(fileId, sheetName, entries) {
+async function findText(fileId, sheetName, entries) {
     const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A1:C2')`;
 
     // const requestBody = {
@@ -367,6 +369,26 @@ async function getFileId(folderPath, fileName) {
 
     throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
 }
+
+async function getSiteId() {
+    const endpoint = `${sp.api.directory.create.baseURI}`;
+
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.headers.append('Content-Type', 'application/json');
+    options.method = 'GET';
+
+    const response = await fetch(`${endpoint}`, options);
+
+    if (response.ok) {
+        const data  = await response.json();
+        return data.parentReference.siteId;
+    }
+
+    throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
+}
+
 
 async function getSheetId(workbookId, sheetName) {
 //    const endpoint = `${sp.api.directory.create.baseURI}${folderPath}/${fileName}`;
