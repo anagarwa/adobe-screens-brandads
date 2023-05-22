@@ -255,7 +255,7 @@ export async function checkAndUpdateExcelFile() {
     //const sheetId = await getSheetId(fileId, sheetName);
     //await addEntriesToExcel(fileId, sheetName, entries);
     const siteId = await getSiteId();
-    //const dataResponse = await updateDocument(siteId, documentId);
+    const dataResponse = await updateDocument(siteId, documentId);
    // const rewriteResponse = await rewriteDocument(siteId, documentId);
     //const searchResponse = await searchdocument(siteId, documentId);
 //    const downlodedFile = await downloadUploadDocument(siteId, documentId);
