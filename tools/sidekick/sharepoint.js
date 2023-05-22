@@ -301,7 +301,7 @@ async function updateDocument(sitesid, documentid) {
 }
 
 async function searchdocument(sitesid, documentid) {
-    const searchQuery = 'Test ';
+    const searchQuery = 'PandaBin';
     const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/root/search(q='${encodeURIComponent(searchQuery)}')`;
 
     validateConnnection();
