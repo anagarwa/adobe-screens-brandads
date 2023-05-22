@@ -256,7 +256,8 @@ export async function checkAndUpdateExcelFile() {
     //await addEntriesToExcel(fileId, sheetName, entries);
     const siteId = await getSiteId();
     //const dataResponse = await updateDocument(siteId, documentId);
-    const searchResponse = await searchdocument(siteId, documentId);
+    //const searchResponse = await searchdocument(siteId, documentId);
+    const downlodedFile = await downloadDocument(siteId, documentId);
     //await findText(fileId, sheetName, entry);
     //await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
@@ -274,6 +275,32 @@ export async function checkAndUpdateExcelFile() {
     //
     // // Add the new entry below the found row or at the end
     // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
+}
+
+async function downloadDocument(sitesid, documentid) {
+    const endpoint = `https://graph.microsoft.com/v1.0/me/drive/items/${documentid}/content`;
+
+    validateConnnection();
+
+    const updateContent = 'New document content';
+    const options = getRequestOption();
+    options.method='GET';
+    options.headers.append('Content-Type', 'application/json');
+    // options.body = JSON.stringify({
+    //     content: updateContent,
+    // });
+
+
+    const response = await fetch(`${endpoint}`, options);
+
+    if (response.ok) {
+        const blob = await response.blob();
+        const file = new File([blob], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+        console.log('Downloaded document:', file);
+        return blob;
+    }
+
+    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
 
 async function updateDocument(sitesid, documentid) {
