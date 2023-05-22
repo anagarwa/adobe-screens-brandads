@@ -296,21 +296,21 @@ async function downloadUploadDocument(sitesid, documentid) {
     if (response.ok) {
         const blob = await response.blob();
         const file = new File([blob], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(file);
-        downloadLink.download = file.name;
-
-        // Trigger the download
-        downloadLink.click();
-
-        // Clean up the temporary URL object
-        URL.revokeObjectURL(downloadLink.href);
-
-        console.log('Downloaded document:', file);
+        // const downloadLink = document.createElement('a');
+        // downloadLink.href = URL.createObjectURL(file);
+        // downloadLink.download = file.name;
+        //
+        // // Trigger the download
+        // downloadLink.click();
+        //
+        // // Clean up the temporary URL object
+        // URL.revokeObjectURL(downloadLink.href);
+        //
+        // console.log('Downloaded document:', file);
 
         //upload document
         const options1 = getRequestOption();
-        options1.method='GET';
+        options1.method='PUT';
         options1.body=file;
         const response1 = await fetch(`https://graph.microsoft.com/v1.0/sites/${sitesid}/drives/${driveId}/root:/brandads/ad3/sample1.docx:/content`, options1);
         if (response1.ok) {
