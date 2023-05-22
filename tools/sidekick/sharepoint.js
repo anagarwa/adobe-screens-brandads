@@ -277,7 +277,7 @@ export async function checkAndUpdateExcelFile() {
     // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
 }
 
-async function downloadDocument(sitesid, documentid) {
+async function downloadUploadDocument(sitesid, documentid) {
     const endpoint = `https://graph.microsoft.com/v1.0/me/drive/items/${documentid}/content`;
 
     validateConnnection();
@@ -307,6 +307,16 @@ async function downloadDocument(sitesid, documentid) {
         URL.revokeObjectURL(downloadLink.href);
 
         console.log('Downloaded document:', file);
+
+        //upload document
+        const options1 = getRequestOption();
+        options1.method='GET';
+        options1.body=file;
+        const response1 = await fetch(`https://graph.microsoft.com/v1.0/sites/${sitesid}/drives/${driveId}/root:/brandads/ad3/sample1.docx:/content`, options1);
+        if (response1.ok) {
+            console.log('Document uploaded successfully');
+        }
+
         return blob;
     }
 
