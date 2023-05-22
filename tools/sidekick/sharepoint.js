@@ -326,11 +326,10 @@ async function downloadUploadDocument(sitesid, documentid) {
 
 async function rewriteDocument(sitesid, documentid) {
     const updatedContent = 'This is the updated content of the document.';
-    const endpoint = `https://graph.microsoft.com/v1.0/me/drive/items/${documentid}/contentt`;
+    const endpoint = `https://graph.microsoft.com/v1.0/me/drive/items/${documentid}/content`;
 
     validateConnnection();
 
-    const updateContent = 'New document content';
     const options = getRequestOption();
     options.method='PATCH';
     options.headers.append('Content-Type', 'text/plain');
