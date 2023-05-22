@@ -296,6 +296,16 @@ async function downloadDocument(sitesid, documentid) {
     if (response.ok) {
         const blob = await response.blob();
         const file = new File([blob], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(file);
+        downloadLink.download = file.name;
+
+        // Trigger the download
+        downloadLink.click();
+
+        // Clean up the temporary URL object
+        URL.revokeObjectURL(downloadLink.href);
+
         console.log('Downloaded document:', file);
         return blob;
     }
