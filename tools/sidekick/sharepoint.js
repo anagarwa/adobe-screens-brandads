@@ -302,24 +302,24 @@ async function updateDocument(sitesid, documentid) {
 
 async function searchdocument(sitesid, documentid) {
     const searchQuery = 'Test ';
-    const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/items/${documentid}/search`;
+    const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/root/search(q='${encodeURIComponent(searchQuery)}')`;
 
     validateConnnection();
 
     const updateContent = 'New document content';
     const options = getRequestOption();
-    options.method='POST';
+    options.method='GET';
     options.headers.append('Content-Type', 'application/json');
-    options.body = JSON.stringify({
-        requests: [
-            {
-                entityTypes: ['driveItem'],
-                query: {
-                    queryString: searchQuery,
-                },
-            },
-        ],
-    });
+    // options.body = JSON.stringify({
+    //     requests: [
+    //         {
+    //             entityTypes: ['driveItem'],
+    //             query: {
+    //                 queryString: searchQuery,
+    //             },
+    //         },
+    //     ],
+    // });
 
 
     const response = await fetch(`${endpoint}`, options);
