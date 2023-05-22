@@ -362,8 +362,10 @@ async function updateDocument(sitesid, documentid) {
 
     const response = await fetch(`${endpoint}`, options);
 
-    if (response.ok) {
-        const data = await response.json();
+    if (response.redirected) {
+        const redirectedUrl = response.url;
+//        const data = await response.json();
+        console.log(redirectedUrl);
         return data;
     }
 
