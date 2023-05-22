@@ -284,7 +284,7 @@ async function updateDocument(sitesid, documentid) {
     const options = getRequestOption();
     options.method='PATCH';
     options.headers.append('Content-Type', 'application/json');
-    options.body = SON.stringify({
+    options.body = JSON.stringify({
         content: updateContent,
     });
 
