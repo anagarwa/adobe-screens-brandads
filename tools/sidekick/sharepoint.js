@@ -255,7 +255,8 @@ export async function checkAndUpdateExcelFile() {
     //const sheetId = await getSheetId(fileId, sheetName);
     //await addEntriesToExcel(fileId, sheetName, entries);
     const siteId = await getSiteId();
-    const dataResponse = await updateDocument(siteId, documentId);
+    //const dataResponse = await updateDocument(siteId, documentId);
+    const searchResponse = await searchdocument(siteId, documentId);
     //await findText(fileId, sheetName, entry);
     //await findTextInExcel(fileId, sheetName, entry.id);
      //await createFolder(folderPath);
@@ -299,6 +300,37 @@ async function updateDocument(sitesid, documentid) {
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
 
+async function searchdocument(sitesid, documentid) {
+    const searchQuery = 'Test ';
+    const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/items/${documentid}/search`;
+
+    validateConnnection();
+
+    const updateContent = 'New document content';
+    const options = getRequestOption();
+    options.method='POST';
+    options.headers.append('Content-Type', 'application/json');
+    options.body = JSON.stringify({
+        requests: [
+            {
+                entityTypes: ['driveItem'],
+                query: {
+                    queryString: searchQuery,
+                },
+            },
+        ],
+    });
+
+
+    const response = await fetch(`${endpoint}`, options);
+
+    if (response.ok) {
+        const data = await response.json();
+        return data;
+    }
+
+    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
+}
 
 async function addEntriesToExcel(fileId, sheetName, entries) {
     const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A3:C4')`;
