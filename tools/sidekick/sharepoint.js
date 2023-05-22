@@ -353,6 +353,7 @@ async function updateDocument(sitesid, documentid) {
     const updateContent = 'New document content';
     const options = getRequestOption();
     options.method='PATCH';
+    options.redirect='manual';
     options.headers.append('Content-Type', 'application/json');
     options.headers.append('Origin',window.location.origin);
     options.body = JSON.stringify({
