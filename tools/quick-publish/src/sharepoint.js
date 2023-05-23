@@ -140,7 +140,7 @@ async function addEntriesToExcel(entries) {
             values: entries.map((entry) => [entry.id, entry.notify, entry.sent]),
         };
 
-        validateConnection();
+        validateConnnection();
 
         const options = getRequestOption();
         options.method = 'PATCH';
@@ -160,4 +160,3 @@ async function addEntriesToExcel(entries) {
         throw error;
     }
 }
-
