@@ -57,6 +57,7 @@ const sp = {
 };
 
 export async function connect(callback) {
+    console.log("I am in connect");
     const publicClientApplication = new PublicClientApplication(sp.clientApp);
 
     await publicClientApplication.loginPopup(sp.login);
