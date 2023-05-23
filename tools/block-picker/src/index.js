@@ -5,5 +5,5 @@ import {Provider, defaultTheme} from '@adobe/react-spectrum';
 
 const app = document.getElementById("app");
 if (app) {
-  ReactDOM.render(<Provider theme={defaultTheme}><Picker /></Provider>, app);
+  ReactDOM.render(<Provider theme={defaultTheme}><p>hellow world</p></Provider>, app);
 }

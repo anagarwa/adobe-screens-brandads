@@ -49,7 +49,7 @@ function getBlockName(block) {
 }
 
 async function fetchPlainBlock(path) {
-  const resp = await fetch(getUrl(`${path}.plain.html`));
+  const resp = await fetch(`${path}.plain.html`);
   if (!resp.ok) return '';
 
   const html = await resp.text();
