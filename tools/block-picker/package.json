@@ -1,5 +1,5 @@
 {
-  "name": "franklin-block-picker",
+  "name": "franklin-quick-publish",
   "version": "1.0.0",
   "description": "",
   "source": "src/index.html",
@@ -9,8 +9,8 @@
     "build": "parcel build --public-url '.' src/index.html"
   },
   "contributors": [
-    "Mark J. Becker <mabecker@adobe.com>",
-    "Hannes Hertach <hhertach@adobe.com>"
+    "Ankit Agarwal <anagarwa@adobe.com>",
+    "Tobias Reiss <reiss@adobe.com>"
   ],
   "license": "Apache-2.0",
   "devDependencies": {
