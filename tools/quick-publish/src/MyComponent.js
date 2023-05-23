@@ -1,27 +1,41 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const MyComponent = () => {
+    const [data, setData] = useState(null);
+
     useEffect(() => {
-        // Run your JavaScript function here
-        myFunction();
+        const fetchData = async () => {
+            try {
+                const result = await myAsyncFunction();
+                setData(result);
+            } catch (error) {
+                console.error('Error in async function:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
+    const myAsyncFunction = async () => {
+        // Your async logic goes here
+        try {
+            const response = await fetch('https://example.com/api/data');
+            const data = await response.json();
+            return data; // Return the value you want to use in useEffect
+        } catch (error) {
+            throw new Error('Error fetching data');
+        }
+    };
 
-
-    return <div>This is my component</div>;
-};
-
-const myFunction = async () => {
-    // Your JavaScript logic goes here
-    console.log('My function is running1234!');
-    try {
-        // Perform async operations
-        const result = await fetch('https://example.com/api/data');
-        const data = await result.json();
-        console.log('Async function completed:', data);
-    } catch (error) {
-        console.error('Error in async function:', error);
-    }
+    return (
+        <div>
+            {data ? (
+                <div>Data: {data}</div>
+            ) : (
+                <div>Loading...</div>
+            )}
+        </div>
+    );
 };
 
 export default MyComponent;
