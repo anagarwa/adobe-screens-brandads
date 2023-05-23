@@ -9,7 +9,7 @@
     },
     {
       "id": "foo1",
-      "title": "Foo1",
+      "title": "Foo2",
       "event": "foo",
       "environments": ["dev", "preview", "live","edit"],
       "isPalette": true,
