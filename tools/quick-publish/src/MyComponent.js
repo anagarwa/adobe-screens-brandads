@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import {connect, checkAndUpdateExcelFile} from './sharepoint.js';
 
 const MyComponent = () => {
     const [data, setData] = useState(null);
@@ -6,8 +7,17 @@ const MyComponent = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await myAsyncFunction();
-                setData(result);
+                await connect(async () => {
+                    try {
+                        const folderResponse  = await checkAndUpdateExcelFile();
+                        console.log(folderResponse);
+                        setData(folderResponse);
+                    } catch (e) {
+                        console.error(e);
+                    }
+                });
+//                const result = await myAsyncFunction();
+
             } catch (error) {
                 console.error('Error in async function:', error);
             }
@@ -23,7 +33,7 @@ const MyComponent = () => {
             const data = await response.json();
             return data; // Return the value you want to use in useEffect
         } catch (error) {
-            return "ABC"
+            return "ABCD"
         }
     };
 
