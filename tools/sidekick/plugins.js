@@ -258,6 +258,7 @@ const generateFeed = (
 const hasFeed = () => !!document.querySelector('link[type="application/xml+atom"]');
 
 const updateFeed = async ({ detail }) => {
+  console.log("I am in update feed");
   // const feedBanner = new BlogSidekickBanner('update-feed');
   // if (!hasFeed) {
   //   feedBanner.write('No feed defined for this page', 5);
