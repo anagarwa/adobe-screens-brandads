@@ -9,7 +9,7 @@
     },
     {
       "id": "foo1",
-      "title": "quick publish",
+      "title": "quick publish1",
       "event": "foo",
       "environments": ["dev", "preview", "live","edit"],
       "isPalette": true,
