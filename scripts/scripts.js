@@ -146,6 +146,7 @@ if (sk) {
 }
 
 async function loadPage() {
+  console.log("I am in page");
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
