@@ -1,8 +1,5 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
 
-// const graphURL = 'https://graph.microsoft.com/v1.0';
-// const baseURI = 'https://graph.microsoft.com/v1.0/sites/adobe.sharepoint.com,7be4993e-8502-4600-834d-2eac96f9558e,1f8af71f-8465-4c46-8185-b0a6ce9b3c85/drive/root:/theblog';
-
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/brandads`;
 const driveId = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
@@ -113,120 +110,9 @@ function getRequestOption() {
     };
 }
 
-// async function createFolder(folder) {
-//     validateConnnection();
-//
-//     const options = getRequestOption();
-//     options.headers.append('Accept', 'application/json');
-//     options.headers.append('Content-Type', 'application/json');
-//     options.method = sp.api.directory.create.method;
-//     options.body = JSON.stringify(sp.api.directory.create.payload);
-//
-//     const res = await fetch(`${sp.api.directory.create.baseURI}${folder}`, options);
-//     if (res.ok) {
-//         return res.json();
-//     }
-//     throw new Error(`Could not create folder: ${folder}`);
-// }
-
-
-async function createFolder(folderPath) {
-    validateConnnection();
-
-    const options = getRequestOption();
-    options.headers.append('Accept', 'application/json');
-    options.headers.append('Content-Type', 'application/json');
-    options.method = sp.api.directory.create.method;
-    options.body = JSON.stringify(sp.api.directory.create.payload);
-
-
-    const res = await fetch(`${sp.api.directory.create.baseURI}/${folderPath}`, options);
-
-    if (res.ok) {
-        return res.json();
-    } else if (res.status === 409) {
-        // Folder already exists, return the existing folder
-        return getFolder(folderPath);
-    }
-
-    throw new Error(`Could not create or get folder: ${folderPath}`);
-}
-
-async function getFolder(folderPath) {
-    validateConnnection();
-
-    const options = getRequestOption();
-    options.method = 'GET';
-
-    const res = await fetch(`${sp.api.driveUrl}/${folderPath}`, options);
-    if (res.ok) {
-        return res.json();
-    }
-
-    throw new Error(`Could not get folder: ${folderPath}`);
-}
-
-
-// async function createExcelFile(filePath) {
-//     validateConnection();
-//
-//     const options = getRequestOption();
-//     options.method = 'GET';
-//
-//     const res = await fetch(`${sp.api.url}/drives/${driveId}/root:${filePath}`, options);
-//
-//     if (res.ok) {
-//         // File already exists, return the existing file
-//         return res.json();
-//     } else if (res.status === 404) {
-//         // File not found, create a new Excel file
-//         return createNewExcelFile(filePath);
-//     }
-//
-//     throw new Error(`Could not check or create Excel file: ${filePath}`);
-// }
-//
-async function createNewExcelFile() {
-    validateConnnection();
-    const folderPath = '/ad3';
-    const filename = 'match.xlsx';
-
-    const options = getRequestOption();
-    options.headers.append('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    options.method = 'PUT';
-    options.body = JSON.stringify({
-        '@microsoft.graph.conflictBehavior': 'replace',
-        name: filename,
-        file: {},
-    });
-
-    const res = await fetch(`${baseURI}${folderPath}/${filename}:/content`, options);
-
-    if (res.ok) {
-        return res.json();
-    }
-
-    throw new Error(`Could not create Excel file: ${filePath}`);
-}
-
-async function createExcelFile(folderPath, fileName) {
-    validateConnnection();
-
-    const options = getRequestOption();
-    options.headers.append('Content-Type', 'application/json');
-    options.method = 'PUT';
-    options.body = JSON.stringify({});
-
-    const res = await fetch(`${baseURI}${folderPath}/${fileName}:/workbook`, options);
-    if (res.ok) {
-        return true;
-    } else {
-        throw new Error(`Could not create Excel file ${fileName} in folder ${folderPath}`);
-    }
-}
-
 
 export async function checkAndUpdateExcelFile() {
+    console.log("in check and update");
     validateConnnection();
 
     const folderPath = '/ad3';
@@ -252,163 +138,15 @@ export async function checkAndUpdateExcelFile() {
         },
     ];
 
-    //const fileId = await getFileId(folderPath,filename);
-    const documentId = await getFileId(folderPath,docName);
-    //const sheetId = await getSheetId(fileId, sheetName);
-    //await addEntriesToExcel(fileId, sheetName, entries);
-    const siteId = await getSiteId();
-    //const dataResponse = await updateDocument(siteId, documentId);
-   // const rewriteResponse = await rewriteDocument(siteId, documentId);
-    //const searchResponse = await searchdocument(siteId, documentId);
-//    const downlodedFile = await downloadUploadDocument(siteId, documentId);
-    //await findText(fileId, sheetName, entry);
-    //await findTextInExcel(fileId, sheetName, entry.id);
-     //await createFolder(folderPath);
-     //await createNewExcelFile();
-    //
-    // // Check if the sheet exists
-    //const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
-    // if (!sheetExists) {
-    //     // Create the sheet if it does not exist
-    //     await createSheet(folderPath, filename, sheetName);
-    // }
-    //
-    // // Find the row index containing the search text
-    // const rowIndex = await findRowIndex(`${folderPath}/${filename}`, sheetName, searchText);
-    //
-    // // Add the new entry below the found row or at the end
-    // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
-}
+    const fileId = await getFileId(folderPath,filename);
+    await addEntriesToExcel(fileId, sheetName, entries);
 
-async function downloadUploadDocument(sitesid, documentid) {
-    const endpoint = `https://graph.microsoft.com/v1.0/me/drive/items/${documentid}/content`;
-
-    validateConnnection();
-
-    const updateContent = 'New document content';
-    const options = getRequestOption();
-    options.method='GET';
-    options.headers.append('Content-Type', 'application/json');
-    // options.body = JSON.stringify({
-    //     content: updateContent,
-    // });
-
-
-    const response = await fetch(`${endpoint}`, options);
-
-    if (response.ok) {
-        const blob = await response.blob();
-        const file = new File([blob], 'document.docx', { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-        // const downloadLink = document.createElement('a');
-        // downloadLink.href = URL.createObjectURL(file);
-        // downloadLink.download = file.name;
-        //
-        // // Trigger the download
-        // downloadLink.click();
-        //
-        // // Clean up the temporary URL object
-        // URL.revokeObjectURL(downloadLink.href);
-        //
-        // console.log('Downloaded document:', file);
-
-        //upload document
-        const options1 = getRequestOption();
-        options1.method='PUT';
-        options1.body=file;
-        const response1 = await fetch(`https://graph.microsoft.com/v1.0/sites/${sitesid}/drives/${driveId}/root:/brandads/ad3/sample1.docx:/content`, options1);
-        if (response1.ok) {
-            console.log('Document uploaded successfully');
-        }
-
-        return blob;
-    }
-
-    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
-}
-
-async function rewriteDocument(sitesid, documentid) {
-    const updatedContent = 'This is the updated content of the document.';
-    const endpoint = `https://graph.microsoft.com/v1.0/me/drive/items/${documentid}/content`;
-
-    validateConnnection();
-
-    const options = getRequestOption();
-    options.method='PATCH';
-    options.headers.append('Content-Type', 'text/plain');
-    options.body = updatedContent
-
-
-    const response = await fetch(`${endpoint}`, options);
-
-    if (response.ok) {
-        const data = await response.json();
-        return data;
-    }
-
-    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
-}
-async function updateDocument(sitesid, documentid) {
-    const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/items/${documentid}/content`;
-
-    validateConnnection();
-
-    const updateContent = 'New document content';
-    const options = getRequestOption();
-    options.method='PATCH';
-    options.redirect='manual';
-    options.headers.append('Content-Type', 'application/json');
-    options.headers.append('Origin',window.location.origin);
-    options.body = JSON.stringify({
-        content: updateContent,
-    });
-
-
-    const response = await fetch(`${endpoint}`, options);
-
-    if (response.redirected) {
-        const redirectedUrl = response.url;
-//        const data = await response.json();
-        console.log(redirectedUrl);
-        return data;
-    }
-
-    throw new Error(`Could not add entries to doc file. Status: ${response.status}`);
-}
-
-async function searchdocument(sitesid, documentid) {
-    const searchQuery = 'PandaBin';
-    const endpoint = `https://graph.microsoft.com/v1.0/sites/${sitesid}/drive/root/search(q='${encodeURIComponent(searchQuery)}')`;
-
-    validateConnnection();
-
-    const updateContent = 'New document content';
-    const options = getRequestOption();
-    options.method='GET';
-    options.headers.append('Content-Type', 'application/json');
-    // options.body = JSON.stringify({
-    //     requests: [
-    //         {
-    //             entityTypes: ['driveItem'],
-    //             query: {
-    //                 queryString: searchQuery,
-    //             },
-    //         },
-    //     ],
-    // });
-
-
-    const response = await fetch(`${endpoint}`, options);
-
-    if (response.ok) {
-        const data = await response.json();
-        return data;
-    }
-
-    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
 
 async function addEntriesToExcel(fileId, sheetName, entries) {
-    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A3:C4')`;
+    console.log("in add entries");
+
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A5:C6')`;
 
     // const requestBody = {
     //     values: [[entries.id, entries.notify, entries.sent]],
@@ -429,6 +167,7 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
     const response = await fetch(`${graphURL}${endpoint}`, options);
 
     if (response.ok) {
+        console.log("entries updated");
         return response.json();
     }
 
@@ -549,56 +288,6 @@ async function getSheetId(workbookId, sheetName) {
 }
 
 
-// async function findTextInExcel(fileId, sheetName, searchText) {
-// //    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/search(q='${encodeURIComponent(searchText)}')`;
-//     var endpointUrl = 'https://graph.microsoft.com/v1.0/me/drive/items/' + fileId + '/workbook/worksheets/' + sheetName + '/range(address=' + sheetName + '!A1:Z1000)?$search="' + searchText + '"';
-//
-//     validateConnnection();
-//
-//     const options = getRequestOption();
-//     options.method='GET';
-//     options.headers.append('Content-Type', 'application/json');
-//
-//
-// //    const response = await fetch(`${graphURL}${endpoint}`, options);
-//     const response = await fetch(`${endpointUrl}`,options);
-//     if (response.ok) {
-//         const searchResults = await response.json();
-
-
-//
-//         return { rowNumber, columnNumber };
-//     }
-//
-//     throw new Error(`Could not find the specified text. Status: ${response.status}`);
-// }
-
-async function findTextInExcel(fileId,sheetName, searchText) {
-    //const endpointUrl = `/drives/${driveId}/items/${fileId}/workbook/worksheets/00000000-0001-0000-0000-000000000000/usedRange/search(q='${searchText}')`;
-    //const endpointUrl = `https://graph.microsoft.com/v1.0/me/drive/items/${fileId}/workbook/worksheets('${sheetName}')/usedRange/find(values="${encodeURIComponent(searchText)}")`;
-
-    //const range = `${sheetName}!A1:C2`;
-    const endpointUrl = `/drive/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A1:C2')?$expand=values`;
-
-    validateConnnection();
-    const options = getRequestOption();
-    options.method='GET';
-    options.headers.append('Content-Type', 'application/json');
-
-    const response = await fetch(`${graphURL}${endpointUrl}`, options);
-    if (response.ok) {
-        const searchResults = await response.json();
-        const firstResult = searchResults.value[0]; // Assuming there's at least one match
-
-        // Retrieve the row and column numbers of the first match
-        const rowNumber = firstResult.row;
-        const columnNumber = firstResult.column;
-
-        return { rowNumber, columnNumber };
-    }
-
-    throw new Error(`Could not find the specified text. Status: ${response.status}`);
-}
 
 export async function getDriveId() {
     const publicClientApplication = new PublicClientApplication(sp.clientApp);
@@ -697,30 +386,6 @@ async function findRowIndex(sheetName, searchText) {
         }
     }
     return -1; // Return -1 if the search text is not found in any row
-}
-
-async function addNotificationEntry(sheetName, searchText, entry) {
-    validateConnnection();
-
-    const rowIndex = await findRowIndex(sheetName, searchText);
-    const insertRowIndex = rowIndex !== -1 ? rowIndex + 1 : -1; // Insert row below the found row or at the end
-
-    const options = getRequestOption();
-    options.headers.append('Accept', 'application/json');
-    options.headers.append('Content-Type', 'application/json');
-    options.method = 'POST';
-    options.body = JSON.stringify({
-        index: insertRowIndex,
-        values: [
-            [entry.id, entry.notify, entry.sent]
-        ]
-    });
-
-    const res = await fetch(`${sp.api.file.get.baseURI}${sheetName}:/workbook/tables/Table1/rows/add`, options);
-    if (res.ok) {
-        return res.json();
-    }
-    throw new Error(`Could not add notification entry to the sheet: ${sheetName}`);
 }
 
 export async function test() {
