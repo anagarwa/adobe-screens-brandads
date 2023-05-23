@@ -23,7 +23,7 @@ const MyComponent = () => {
             const data = await response.json();
             return data; // Return the value you want to use in useEffect
         } catch (error) {
-            throw new Error('Error fetching data');
+            return "ABC"
         }
     };
 
