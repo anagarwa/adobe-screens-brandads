@@ -9,11 +9,11 @@
     },
     {
       "id": "foo1",
-      "title": "Foo3",
+      "title": "Foo4",
       "event": "foo",
       "environments": ["dev", "preview", "live","edit"],
       "isPalette": true,
-      "paletteRect": "top: auto; bottom: 25px; left: 5px; width: 300px; height: calc(100% - 200px); border-radius: var(--hlx-sk-button-border-radius); overflow: hidden; resize: horizontal;",
+      "paletteRect": "top: auto; bottom: 25px; left: 5px; width: 300px; height: calc(100% - 200px); border-radius: var(--hlx-sk-button-border-radius); overflow: hidden; resize: horizontal;display:none;",
       "url": "/tools/block-picker/dist/index.html",
       "includePaths": [ "**.docx**" ]
 
