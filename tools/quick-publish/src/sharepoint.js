@@ -258,26 +258,6 @@ export async function checkAndUpdateExcelFile() {
     //await addEntriesToExcel(fileId, sheetName, entries);
     const siteId = await getSiteId();
     //const dataResponse = await updateDocument(siteId, documentId);
-
-
-    var documentUrl = window.location.href;
-    console.log(documentUrl);
-// Make an HTTP GET request to retrieve the document content
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", documentUrl, true);
-    xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Document content is available in the response
-            var documentContent = xhr.responseText;
-            console.log(documentContent);
-            // Further processing of the document content
-        }
-    };
-    xhr.send();
-
-
    // const rewriteResponse = await rewriteDocument(siteId, documentId);
     //const searchResponse = await searchdocument(siteId, documentId);
 //    const downlodedFile = await downloadUploadDocument(siteId, documentId);
