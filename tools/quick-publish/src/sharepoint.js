@@ -148,6 +148,21 @@ export async function checkAndUpdateExcelFile() {
 
 }
 
+export async function quickpublish() {
+    console.log("in quick publish");
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method='POST';
+    const response = await fetch(`https://admin.hlx.page/live/anagarwa/adobe-screens-brandads/main/ad3/sampledoc`, options);
+    if (response.ok) {
+        console.log("published");
+        return "published";
+    }
+}
+
+
+
 async function addEntriesToExcel(fileId, sheetName, entries) {
     console.log("in add entries");
 
