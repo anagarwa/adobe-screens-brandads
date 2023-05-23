@@ -17,7 +17,7 @@ const sp = {
 };
 
 export async function connect(callback) {
-    console.log("in connect method123");
+    console.log("in connect method1234");
     const publicClientApplication = new PublicClientApplication(sp.clientApp);
 
     await publicClientApplication.loginPopup(sp.login);
