@@ -12,8 +12,6 @@
       "title": "Foo1",
       "event": "foo",
       "environments": ["dev", "preview", "live","edit"],
-      "isPalette": true,
-      "paletteRect": "top: auto; bottom: 25px; left: 5px; width: 300px; height: calc(100% - 200px); border-radius: var(--hlx-sk-button-border-radius); overflow: hidden; resize: horizontal;",
       "url": "/tools/sidekick/foo.html",
       "includePaths": [ "**.docx**" ]
 
