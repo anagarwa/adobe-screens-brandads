@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {connect, checkAndUpdateExcelFile, quickpublish} from './sharepoint.js';
 
-const MyComponent = () => {
+const QuickPublish = () => {
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -44,4 +44,4 @@ const MyComponent = () => {
     );
 };
 
-export default MyComponent;
+export default QuickPublish;
