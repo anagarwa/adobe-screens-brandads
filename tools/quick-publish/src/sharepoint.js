@@ -139,14 +139,19 @@ export async function checkAndUpdateExcelFile() {
     ];
 
     const fileId = await getFileId(folderPath,filename);
-    await addEntriesToExcel(fileId, sheetName, entries);
+    const  entryUpdated = await addEntriesToExcel(fileId, sheetName, entries);
+    if ("updated" === entryUpdated) {
+        return "updated"
+    } else {
+        return  "not updated";
+    }
 
 }
 
 async function addEntriesToExcel(fileId, sheetName, entries) {
     console.log("in add entries");
 
-    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A5:C6')`;
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A6:C7')`;
 
     // const requestBody = {
     //     values: [[entries.id, entries.notify, entries.sent]],
@@ -168,7 +173,7 @@ async function addEntriesToExcel(fileId, sheetName, entries) {
 
     if (response.ok) {
         console.log("entries updated");
-        return response.json();
+        return "updated";
     }
 
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);

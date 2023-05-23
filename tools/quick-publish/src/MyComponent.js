@@ -9,15 +9,13 @@ const MyComponent = () => {
             try {
                 await connect(async () => {
                     try {
-                        const folderResponse  = await checkAndUpdateExcelFile();
-                        console.log(folderResponse);
-                        setData(folderResponse);
+                        const response  = await checkAndUpdateExcelFile();
+                        console.log(response);
+                        setData(response);
                     } catch (e) {
                         console.error(e);
                     }
                 });
-//                const result = await myAsyncFunction();
-
             } catch (error) {
                 console.error('Error in async function:', error);
             }
