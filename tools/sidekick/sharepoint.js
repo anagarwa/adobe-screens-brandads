@@ -755,3 +755,75 @@ export async function test() {
     await fetch(`${sp.api.file.createUploadSession.baseURI}`, options);
     throw new Error('Could not upload file');
 }
+
+// async function addEntriesToExcel(fileId, sheetName, entries) {
+//     console.log("in add entries");
+//
+//     const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A6:C7')`;
+//
+//     // const requestBody = {
+//     //     values: [[entries.id, entries.notify, entries.sent]],
+//     // };
+//
+//     const requestBody = {
+//         values: entries.map((entry) => [entry.id, entry.notify, entry.sent]),
+//     };
+//
+//     validateConnnection();
+//
+//     const options = getRequestOption();
+//     options.method='PATCH';
+//     options.headers.append('Content-Type', 'application/json');
+//     options.body = JSON.stringify(requestBody);
+//
+//
+//     const response = await fetch(`${graphURL}${endpoint}`, options);
+//
+//     if (response.ok) {
+//         console.log("entries updated");
+//         return "updated";
+//     }
+//
+//     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
+// }
+//
+// async function getFileId(driveid, folderPath, fileName) {
+//     const endpoint = `${graphURL}/drives/${driveId}/root:${folderPath}/${fileName}`;
+//     'https://graph.microsoft.com/v1.0';
+//     `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/brandads`;
+//     // const endpoint = `${sp.api.directory.create.baseURI}${folderPath}/${fileName}`;
+//
+//     validateConnnection();
+//
+//     const options = getRequestOption();
+//     options.headers.append('Content-Type', 'application/json');
+//     options.method = 'GET';
+//
+//     const response = await fetch(`${endpoint}`, options);
+//
+//     if (response.ok) {
+//         const file = await response.json();
+//         return file.id;
+//     }
+//
+//     throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
+// }
+
+// async function getDriveId() {
+//
+//     validateConnnection();
+//
+//     const options = getRequestOption();
+//     options.method = 'GET';
+//
+//     try{
+//     const response = await fetch('`https://graph.microsoft.com/v1.0/sites/AdobeFranklinPOC/drives', options);
+//         if (response.ok) {
+//             const data = await response.json();
+//             driveId = data.value[0].id;
+//             console.log('Drive ID:', driveId);
+//         }
+//     } catch (error) {
+//         throw new Error('Failed to retrieve drive ID');
+//     }
+// }

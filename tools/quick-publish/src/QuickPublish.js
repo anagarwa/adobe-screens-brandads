@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {connect, checkAndUpdateExcelFile, quickpublish} from './sharepoint.js';
+import {connect, PublishAndNotify, quickpublish} from './sharepoint.js';
 
 const QuickPublish = () => {
     const [data, setData] = useState(null);
@@ -9,16 +9,7 @@ const QuickPublish = () => {
             try {
                 await connect(async () => {
                     try {
-                        const response  = await checkAndUpdateExcelFile();
-                        console.log(response);
-                        setData(response);
-                    } catch (e) {
-                        console.error(e);
-                    }
-                });
-                await connect(async () => {
-                    try {
-                        const response  = await quickpublish();
+                        const response  = await PublishAndNotify();
                         console.log(response);
                         setData(response);
                     } catch (e) {
