@@ -13,7 +13,7 @@ const MyComponent = () => {
 
 const myFunction = () => {
     // Your JavaScript logic goes here
-    console.log('My function is running123!');
+    console.log('My function is running1234!');
 };
 
 export default MyComponent;
