@@ -17,7 +17,7 @@ const sp = {
 };
 
 export async function connect(callback) {
-    console.log("in connect method1234");
+    console.log("in connect method");
     const publicClientApplication = new PublicClientApplication(sp.clientApp);
 
     await publicClientApplication.loginPopup(sp.login);
@@ -75,7 +75,7 @@ function getRequestOption() {
 
 
 export async function PublishAndNotify() {
-    console.log("in publis and notify");
+    console.log("in publish and notify");
     validateConnnection();
 
     const entries = [{
