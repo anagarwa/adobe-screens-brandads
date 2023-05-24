@@ -9,7 +9,7 @@
     },
     {
       "id": "foo1",
-      "title": "quick publish2",
+      "title": "quick publish1",
       "event": "foo",
       "environments": ["dev", "preview", "live","edit"],
       "url": "/tools/quick-publish/dist/index.html",
