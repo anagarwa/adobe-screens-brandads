@@ -6,6 +6,7 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/brandads`;
 const driveId = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
+
 let connectAttempts = 0;
 let accessToken;
 
@@ -17,7 +18,7 @@ const sp = {
         },
     },
     login: {
-        redirectUri: '/tools/sidekick/spauth.html',
+        redirectUri: 'https://main--fcbayern--hlxsites.hlx.page/tools/sidekick/spauth.html',
     },
     api: {
         url: graphURL,
