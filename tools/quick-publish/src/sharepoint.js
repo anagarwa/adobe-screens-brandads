@@ -1,17 +1,17 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
-// const driveId = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
-// const rootFolder = '/fcbayern';
-// const matchDataFolder = 'matchdata';
-// const workbookName= 'pushnotifications.xlsx';
-// const sheetName = 'notifications';
-// const baseURI = `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern`;
-//
-// const orgName = "hlxsites";
-// const repoName = "fcbayern";
-// const branch = "liveticker1";
-// const path = "/de/spiele/profis/bundesliga/2022-2023/sv-werder-bremen-fc-bayern-muenchen-06-05-2023/liveticker";
+const driveId = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
+const rootFolder = '/fcbayern';
+const matchDataFolder = 'matchdata';
+const workbookName= 'pushnotifications.xlsx';
+const sheetName = 'notifications';
+const baseURI = `https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern`;
+
+const orgName = "hlxsites";
+const repoName = "fcbayern";
+const branch = "liveticker1";
+const path = "/de/spiele/profis/bundesliga/2022-2023/sv-werder-bremen-fc-bayern-muenchen-06-05-2023/liveticker";
 
 
 let connectAttempts = 0;
@@ -107,15 +107,15 @@ export async function PublishAndNotify() {
     // await findText(fileId, sheetName, entry);
     //
     // const  entryUpdated = await addEntriesToExcel(entries);
-    // const quickPublish = await quickpublish();
-    // if (
-    //     //"updated" === entryUpdated
-    //     //&&
-    //     quickPublish === "published") {
-    //     return "updated";
-    // } else {
-    //     return  "not updated";
-    // }
+    const quickPublish = await quickpublish();
+    if (
+        //"updated" === entryUpdated
+        //&&
+        quickPublish === "published") {
+        return "updated";
+    } else {
+        return  "not updated";
+    }
 
 }
 
