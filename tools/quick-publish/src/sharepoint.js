@@ -119,7 +119,7 @@ export async function PublishAndNotify() {
 // }
 
 async function quickpublish() {
-    console.log("in quick publish1");
+    console.log("in quick publish12");
     // validateConnnection();
     //
     const options = {
