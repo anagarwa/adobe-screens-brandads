@@ -12,7 +12,7 @@ const sp = {
         },
     },
     login: {
-        redirectUri: '/tools/sidekick/spauth.html',
+        redirectUri: 'https://main--fcbayern--hlxsites.hlx.page/tools/sidekick/spauth.html',
     },
 };
 
