@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AEM Screens User Input Form</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+  <h1 class="title">AEM Screens Campaign Generator</h1>
+  <form id="userInputForm">
+    <div class="input-group">
+<!--      <label for="userInput" class="label">Enter your input:</label>-->
+      <input type="text" id="userInput" name="userInput" class="input" placeholder="Enter the intent for Campaign">
+    </div>
+    <div class="input-group" style="display: none;">
+      <label for="discountInput" class="label">Discount:</label>
+      <input type="number" id="discountInput" name="discountInput" class="input" placeholder="Discount required">
+    </div>
+    <button id="myButton" type="button" class="button"> Generate Campaign</button>
+  </form>
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
