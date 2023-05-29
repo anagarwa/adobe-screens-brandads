@@ -354,24 +354,25 @@ async function downloadUploadDocument(sitesid, documentid) {
 
 async function downloadUploadDocumentOnSite(sitesid, documentid) {
 
-    //connect to site
+// API endpoint
     try {
-        const siteUrl = "https://adobe.sharepoint.com/sites/FirstSite/Shared%20Documents/Forms/AllItems.aspx";
-        const url = `${siteUrl}/_api/site/id`;
+        //get document id
+        const siteId = "FirstSite";
 
-        const response = await fetch(url, {
-            method: "GET", headers: {
-                "Accept": "application/json;odata=verbose"
-            }
-        })
+        // File path within the SharePoint site
+        const filePath = "first/First.docx";
 
+        validateConnnection();
 
+        const options = getRequestOption();
+
+        options.method='GET';
+        const url = `https://graph.microsoft.com/v1.0/sites/${siteId}/drive/root:/${filePath}`
+        const response = await fetch(url, options);
         const responseData = await response.json();
-        const siteId = responseData.d.Id;
-        console.log(siteId);
-        return siteId;
+        console.log(responseData.id);
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 
 }
