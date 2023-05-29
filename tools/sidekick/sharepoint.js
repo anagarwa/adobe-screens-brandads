@@ -365,6 +365,7 @@ async function downloadUploadDocumentOnSite(sitesid, documentid) {
         validateConnnection();
 
         const options = getRequestOption();
+        options.headers.append('Content-Type', 'application/json');
 
         // options.method='GET';
         // options.
