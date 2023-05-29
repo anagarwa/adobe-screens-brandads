@@ -370,14 +370,14 @@ async function downloadUploadDocumentOnSite(sitesid, documentid) {
 
         // options.method='GET';
         // options.
-        //const url = `https://graph.microsoft.com/v1.0/sites/${siteId}`
+        const url = `https://graph.microsoft.com/v1.0/sites/${siteId}`
 
-        const siteUrl = "https://adobe.sharepoint.com/sites/FirstSite/Shared%20Documents/Forms/AllItems.aspx";
-        const url = `https://graph.microsoft.com/v1.0/sites?filter=webUrl eq '${siteUrl}'`;
+        // const siteUrl = "https://adobe.sharepoint.com/sites/FirstSite/Shared%20Documents/Forms/AllItems.aspx";
+        // const url = `https://graph.microsoft.com/v1.0/sites?filter=webUrl eq '${siteUrl}'`;
         const response = await fetch(url, options);
         if (response.ok) {
             const responseData = await response.json();
-            console.log(responseData.value[0].id);
+            console.log(responseData);
         }
 
     } catch (error) {
