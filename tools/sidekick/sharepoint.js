@@ -228,76 +228,79 @@ async function createExcelFile(folderPath, fileName) {
 
 export async function checkAndUpdateExcelFile() {
     validateConnnection();
-
-    const folderPath = '/ad3';
-    const filename = 'match.xlsx';
-    const docName = `sampledoc.docx`;
-
-    const sheetName = 'defaultsheet';
-    //const searchText = 'push notification';
-    const entry = {
-        id: 'abc2',
-        notify: 'event2',
-        sent: 'yes2'
-    };
-    const entries = [{
-        id: 'abc3',
-        notify: 'event3',
-        sent: 'yes3'
-    },
-        {
-            id: 'abc4',
-            notify: 'event4',
-            sent: 'yes4'
-        },
-    ];
-
-    //const fileId = await getFileId(folderPath,filename);
-    const documentId = await getFileId(folderPath,docName);
-    //const sheetId = await getSheetId(fileId, sheetName);
-    //await addEntriesToExcel(fileId, sheetName, entries);
-    const siteId = await getSiteId();
-    //const dataResponse = await updateDocument(siteId, documentId);
+    const response = downloadUploadDocumentOnSite();
 
 
-    var documentUrl = window.location.href;
-    console.log(documentUrl);
-// Make an HTTP GET request to retrieve the document content
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", documentUrl, true);
-    xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Document content is available in the response
-            var documentContent = xhr.responseText;
-            console.log(documentContent);
-            // Further processing of the document content
-        }
-    };
-    xhr.send();
-
-
-   // const rewriteResponse = await rewriteDocument(siteId, documentId);
-    //const searchResponse = await searchdocument(siteId, documentId);
-//    const downlodedFile = await downloadUploadDocument(siteId, documentId);
-    //await findText(fileId, sheetName, entry);
-    //await findTextInExcel(fileId, sheetName, entry.id);
-     //await createFolder(folderPath);
-     //await createNewExcelFile();
-    //
-    // // Check if the sheet exists
-    //const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
-    // if (!sheetExists) {
-    //     // Create the sheet if it does not exist
-    //     await createSheet(folderPath, filename, sheetName);
-    // }
-    //
-    // // Find the row index containing the search text
-    // const rowIndex = await findRowIndex(`${folderPath}/${filename}`, sheetName, searchText);
-    //
-    // // Add the new entry below the found row or at the end
-    // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
+//     const folderPath = '/ad3';
+//     const filename = 'match.xlsx';
+//     const docName = `sampledoc.docx`;
+//
+//     const sheetName = 'defaultsheet';
+//     //const searchText = 'push notification';
+//     const entry = {
+//         id: 'abc2',
+//         notify: 'event2',
+//         sent: 'yes2'
+//     };
+//     const entries = [{
+//         id: 'abc3',
+//         notify: 'event3',
+//         sent: 'yes3'
+//     },
+//         {
+//             id: 'abc4',
+//             notify: 'event4',
+//             sent: 'yes4'
+//         },
+//     ];
+//
+//     //const fileId = await getFileId(folderPath,filename);
+//     const documentId = await getFileId(folderPath,docName);
+//     //const sheetId = await getSheetId(fileId, sheetName);
+//     //await addEntriesToExcel(fileId, sheetName, entries);
+//     const siteId = await getSiteId();
+//     //const dataResponse = await updateDocument(siteId, documentId);
+//
+//
+//     var documentUrl = window.location.href;
+//     console.log(documentUrl);
+// // Make an HTTP GET request to retrieve the document content
+//
+//     var xhr = new XMLHttpRequest();
+//     xhr.open("GET", documentUrl, true);
+//     xhr.setRequestHeader("Authorization", `Bearer ${accessToken}`);
+//     xhr.onreadystatechange = function() {
+//         if (xhr.readyState === 4 && xhr.status === 200) {
+//             // Document content is available in the response
+//             var documentContent = xhr.responseText;
+//             console.log(documentContent);
+//             // Further processing of the document content
+//         }
+//     };
+//     xhr.send();
+//
+//
+//    // const rewriteResponse = await rewriteDocument(siteId, documentId);
+//     //const searchResponse = await searchdocument(siteId, documentId);
+// //    const downlodedFile = await downloadUploadDocument(siteId, documentId);
+//     //await findText(fileId, sheetName, entry);
+//     //await findTextInExcel(fileId, sheetName, entry.id);
+//      //await createFolder(folderPath);
+//      //await createNewExcelFile();
+//     //
+//     // // Check if the sheet exists
+//     //const sheetExists = await doesSheetExist(folderPath, filename, sheetName);
+//     // if (!sheetExists) {
+//     //     // Create the sheet if it does not exist
+//     //     await createSheet(folderPath, filename, sheetName);
+//     // }
+//     //
+//     // // Find the row index containing the search text
+//     // const rowIndex = await findRowIndex(`${folderPath}/${filename}`, sheetName, searchText);
+//     //
+//     // // Add the new entry below the found row or at the end
+//     // await addNotificationEntry(`${folderPath}/${filename}`, sheetName, searchText, entry);
 }
 
 async function downloadUploadDocument(sitesid, documentid) {
@@ -345,6 +348,39 @@ async function downloadUploadDocument(sitesid, documentid) {
 
     throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
+
+
+
+
+async function downloadUploadDocumentOnSite(sitesid, documentid) {
+
+    //connect to site
+    try {
+        const siteUrl = "https://adobe.sharepoint.com/sites/FirstSite/Shared%20Documents/Forms/AllItems.aspx";
+        const url = `${siteUrl}/_api/site/id`;
+
+        const response = await fetch(url, {
+            method: "GET", headers: {
+                "Accept": "application/json;odata=verbose"
+            }
+        })
+
+
+        const responseData = await response.json();
+        const siteId = responseData.d.Id;
+        console.log(siteId);
+        return siteId;
+    } catch (error) {
+        console.error(error);
+    }
+
+}
+
+
+
+
+
+
 
 async function rewriteDocument(sitesid, documentid) {
     const updatedContent = 'This is the updated content of the document.';
