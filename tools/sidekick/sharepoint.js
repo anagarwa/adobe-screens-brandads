@@ -366,11 +366,15 @@ async function downloadUploadDocumentOnSite(sitesid, documentid) {
 
         const options = getRequestOption();
 
-        options.method='GET';
-        const url = `https://graph.microsoft.com/v1.0/sites/${siteId}/drive/root:/${filePath}`
+        // options.method='GET';
+        // options.
+        const url = `https://graph.microsoft.com/v1.0/sites/{siteId}`
         const response = await fetch(url, options);
-        const responseData = await response.json();
-        console.log(responseData.id);
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData);
+        }
+
     } catch (error) {
         console.log(error);
     }
