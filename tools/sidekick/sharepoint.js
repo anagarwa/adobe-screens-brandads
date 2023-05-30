@@ -370,7 +370,8 @@ async function downloadUploadDocumentOnSite(sitesid, documentid) {
 
         // options.method='GET';
         // options.
-        const url = `https://graph.microsoft.com/v1.0/sites/${siteId}`
+
+        const url = `https://graph.microsoft.com/v1.0/sites/adobe.sharepoint.com:/sites/FirstSite?$select=id`
 
         // const siteUrl = "https://adobe.sharepoint.com/sites/FirstSite/Shared%20Documents/Forms/AllItems.aspx";
         // const url = `https://graph.microsoft.com/v1.0/sites?filter=webUrl eq '${siteUrl}'`;
