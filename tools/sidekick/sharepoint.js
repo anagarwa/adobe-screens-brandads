@@ -708,6 +708,7 @@ export async function getDriveId() {
 async function getDriveId1() {
     try {
         validateConnnection();
+        console.log(accessToken);
         const driveResponse = await fetch('https://graph.microsoft.com/v1.0/drives', getRequestOption());
         const driveData = await driveResponse.json();
         const driveId = driveData.id;
