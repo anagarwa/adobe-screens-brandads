@@ -228,7 +228,9 @@ async function createExcelFile(folderPath, fileName) {
 
 export async function checkAndUpdateExcelFile() {
     validateConnnection();
-    const response = downloadUploadDocumentOnSite();
+
+    const response = await getDriveId1();
+    //const response = downloadUploadDocumentOnSite();
 
 
 
@@ -370,6 +372,9 @@ async function downloadUploadDocumentOnSite(sitesid, documentid) {
 
         // options.method='GET';
         // options.
+
+        //adobe.sharepoint.com,d7196e56-4780-4a65-9249-504609568d95,b3d702f4-e849-4da5-84bc-616aa7f5ab17"
+
 
         const url = `https://graph.microsoft.com/v1.0/sites/adobe.sharepoint.com:/sites/FirstSite?$select=id`
 
@@ -700,6 +705,18 @@ export async function getDriveId() {
 }
 
 
+async function getDriveId1() {
+    try {
+        validateConnnection();
+        const driveResponse = await fetch('https://graph.microsoft.com/v1.0/drives', getRequestOption());
+        const driveData = await driveResponse.json();
+        const driveId = driveData.id;
+
+        return driveId;
+    } catch (error) {
+        throw new Error('Failed to retrieve drive ID');
+    }
+}
 
 export async function saveFile(file, dest) {
     validateConnnection();
