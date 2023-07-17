@@ -9,11 +9,11 @@
     ],
     "defaultProvider": "franklin"
   },
-  "timestamp": 1689576324013,
+  "timestamp": 1689582816568,
   "entries": [
     {
       "path": "/content/screens/ads/basketball/ad4.html",
-      "timestamp": 1684951529000
+      "timestamp": 1689582816381
     },
     {
       "path": "/scripts/lib-franklin.js",
