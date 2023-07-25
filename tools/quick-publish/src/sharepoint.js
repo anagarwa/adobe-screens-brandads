@@ -1,8 +1,16 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
+const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
+const driveIDGlobal = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
 let connectAttempts = 0;
 let accessToken;
+
+const orgName = 'hlxsites';
+const repoName = 'fcbayern';
+const ref = 'main';
+const path = 'de/spiele/profis/bundesliga/2022-2023/sv-werder-bremen-fc-bayern-muenchen-06-05-2023/liveticker';
+const mockNotificationService = 'https://288650-257ambermackerel.adobeio-static.net/api/v1/web/brandads/getads';
 
 const sp = {
     clientApp: {
@@ -17,10 +25,14 @@ const sp = {
 };
 
 export async function connect(callback) {
-    console.log("in connect method2");
     const publicClientApplication = new PublicClientApplication(sp.clientApp);
 
-    await publicClientApplication.loginPopup(sp.login);
+    const accounts = publicClientApplication.getAllAccounts();
+
+    if (accounts.length === 0) {
+        // User is not logged in, show the login popup
+        await publicClientApplication.loginPopup(sp.login);
+    }
 
     const account = publicClientApplication.getAllAccounts()[0];
 
@@ -73,157 +85,196 @@ function getRequestOption() {
     };
 }
 
-
 export async function PublishAndNotify() {
-    // console.log("in publish and notify");
-    // validateConnnection();
-    //
-    // const entries = [{
-    //     id: 'uniqueid1',
-    //     notify: 'changes',
-    //     sent: 'yes'
-    // },
-    // {
-    //     id: 'uniqueid2',
-    //     notify: 'goal',
-    //     sent: 'yes'
-    // },
-    // ];
-    //
-    // const  entryUpdated = await addEntriesToExcel(entries);
-    const quickPublish = await quickpublish();
-    // if ("updated" === entryUpdated && quickPublish === "published") {
-    //     return "updated";
-    // } else {
-    //     return  "not updated";
+    //const quickPublish = await quickpublish();
+    const driveID = await getDriveId();
+    console.log("Drive id is " + driveID);
+    // if (quickPublish === 'published') {
+    //     return 'updated';
     // }
-
-    if (quickPublish === "published") {
-        console.log("published");
-        return "updated";
-    }
-
 }
-
-// async function quickpublish() {
-//     console.log("in quick publish1");
-//     validateConnnection();
-//
-//     const options = getRequestOption();
-//     options.method='POST';
-//     const response = await fetch(`https://admin.hlx.page/preview/hlxsites/fcbayern/main/de/spiele/profis/bundesliga/2022-2023/sv-werder-bremen-fc-bayern-muenchen-06-05-2023/liveticker`, options);
-//     if (response.ok) {
-//         console.log("published");
-//         return "published";
-//     }
-// }
 
 async function quickpublish() {
-    console.log("in quick publish12");
-    // validateConnnection();
-    //
+    console.log('in quick publish8');
+    console.log(`Quick Publish Started ${new Date().toLocaleString()}`);
+
+    let response;
     const options = {
-        method:'POST'
-    }
-    const response = await fetch(`https://admin.hlx.page/preview/hlxsites/fcbayern/main/de/spiele/profis/bundesliga/2022-2023/sv-werder-bremen-fc-bayern-muenchen-06-05-2023/liveticker`, options);
+        method: 'POST',
+    };
+
+    response = await fetch(`https://admin.hlx.page/preview/${orgName}/${repoName}/${ref}/${path}`, options);
+
     if (response.ok) {
-        console.log("published");
-        const livetickerurl = `https://${branch}--${repoName}--${orgName}.hlx.page${path}`;
-        console.log(`liveticker url is ${livetickerurl}`);
+        console.log(`Document Previewed at ${new Date().toLocaleString()}`);
+    } else {
+        throw new Error(`Could not previewed. Status: ${response.status}`);
+    }
 
-        // const browser = await puppeteer.launch();
-        // const page = await browser.newPage();
-        // await page.goto(livetickerurl);
-        // const liveTickerHtml = await page.content();
-        // await browser.close();
+    response = await fetch(`https://admin.hlx.page/live/${orgName}/${repoName}/${ref}/${path}`, options);
 
-        const liveTickerResponse = await fetch(livetickerurl);
-        const liveTickerHtml = await liveTickerResponse.text();
-        console.log(liveTickerHtml);
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(liveTickerHtml, 'text/html');
+    if (response.ok) {
+        console.log(`Document Published at ${new Date().toLocaleString()}`);
+    } else {
+        throw new Error(`Could not published. Status: ${response.status}`);
+    }
 
+    response = await fetch(`https://admin.hlx.page/cache/${orgName}/${repoName}/${ref}/${path}`, options);
 
-        const jsonArray = [];
-        const eventElements = doc.querySelectorAll('.goal, .whistle');
-        for (let j = 0; j < eventElements.length; j++) {
-            const eventElement = eventElements[j];
-            const jsonObject = {}
-            jsonObject['eventType'] = eventElement.classList;
-            const divElements = eventElement.querySelectorAll(':scope > div');
-            for (let i = 0; i < divElements.length; i++) {
-                console.log(divElements[i]);
-                const keyValueDiv = divElements[i].querySelectorAll('div');
-                const key = keyValueDiv[0].textContent.trim().toLowerCase().replace(' ', '_');
-                const value = keyValueDiv[1].textContent.trim();
-                jsonObject[key] = value;
-            }
-            if (jsonObject['push'] === 'yes' || jsonObject['push'] === 'no') {
-                //todo method options with actual service
-                // var options = {
-                //     method:'POST',
-                //     body:JSON.stringify(jsonObject)
-                // }
-                const notificationSent = await fetch("https://liveticker1--fcbayern--hlxsites.hlx.page/tools/quick-publish/dist/notification.html", {});
-                const notifcalresponse = await notificationSent.text();
-                console.log("response is " + notifcalresponse);
-                if (notificationSent.ok) {
-                    console.log("notification has been updated");
+    if (response.ok) {
+        console.log(`Purge cache ${new Date().toLocaleString()}`);
+    } else {
+        throw new Error(`Could not purge cache. Status: ${response.status}`);
+    }
+
+    let fileId = localStorage.getItem('fileId');
+    if (!fileId) {
+        fileId = await getFileId();
+        localStorage.setItem('fileId', fileId);
+    }
+
+    const driveId = driveIDGlobal;
+
+    const sheetName = 'notifications';
+    const lastRow = 0;
+    let entryRowExcel = -1;
+    const excelData = await getExcelData(driveId, fileId, sheetName);
+
+    const livetickerurl = `https://${ref}--${repoName}--${orgName}.hlx.page/${path}`;
+
+    const liveTickerResponse = await fetch(livetickerurl);
+    const liveTickerHtml = await liveTickerResponse.text();
+    console.log(liveTickerHtml);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(liveTickerHtml, 'text/html');
+
+    const jsonArray = [];
+    const eventElements = doc.querySelectorAll('.goal, .whistle');
+    for (let j = 0; j < eventElements.length; j++) {
+        const eventElement = eventElements[j];
+        const jsonObject = {};
+        jsonObject.eventType = eventElement.classList;
+        const divElements = eventElement.querySelectorAll(':scope > div');
+        for (let i = 0; i < divElements.length; i++) {
+            const keyValueDiv = divElements[i].querySelectorAll('div');
+            const key = keyValueDiv[0].textContent.trim().toLowerCase().replace(' ', '_');
+            const value = keyValueDiv[1].textContent.trim();
+            jsonObject[key] = value;
+        }
+        if (jsonObject.push === 'yes' || jsonObject.push === 'true') {
+            // todo code to confirm if it has been updated in excel if not send notification and update excel
+
+            for (let row = 0; row < excelData.values.length; row++) {
+                if (excelData.values[row][0].toString().trim() === jsonObject.id.toString().trim()) {
+                    // event already exists in Excel
+                    break;
                 }
-                //todo code to confirm if it has been updated in excel if not send notification and update excel
-                jsonArray.push(jsonObject);
+                if (!excelData.values[row][0]) {
+                    entryRowExcel = row + 2;
+
+                    // sending notification data to notification service
+                    const notificationResponse = await fetch(mockNotificationService, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(jsonObject),
+                    });
+
+                    if (notificationResponse.ok) {
+                        console.log(`Notification of ${jsonObject.id}  sent at ${new Date().toLocaleString()}`);
+                        jsonArray.push(
+                            {
+                                id: jsonObject.id,
+                                notificationData: JSON.stringify(jsonObject),
+                            },
+                        );
+                    }
+                    break;
+                }
             }
         }
+    }
 
-        console.log(JSON.stringify(jsonArray));
-        return "published";
+    if (jsonArray.length > 0) {
+        const addEntriesResponse = await addEntriesToExcel(driveId, fileId, sheetName, entryRowExcel, jsonArray);
+    }
+    return 'published';
+}
+
+async function getExcelData(driveId, fileId, sheetName) {
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A2:A100')`;
+
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method = 'GET';
+    options.headers.append('Content-Type', 'application/json');
+
+    const response = await fetch(`${graphURL}${endpoint}`, options);
+
+    if (response.ok) {
+        const searchResults = await response.json();
+        return searchResults;
+    }
+
+    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
+}
+
+async function getDriveId() {
+    try {
+        validateConnnection();
+        const options = getRequestOption();
+
+        const driveResponse = await fetch('https://graph.microsoft.com/v1.0/me/drive', options);
+        const driveData = await driveResponse.json();
+        const driveId = driveData.id;
+
+        return driveId;
+    } catch (error) {
+        throw new Error('Failed to retrieve drive ID');
     }
 }
 
+async function getFileId() {
+    const endpoint = `${baseURI}/matchdata/pushnotifications.xlsx`;
 
+    validateConnnection();
 
-async function addEntriesToExcel(entries) {
-    try {
-        const siteUrl = "https://fcbayernmuenchen.sharepoint.com/sites/AdobeFranklinPOC";
-        const folderName = "/website/de/spiele/profis/bundesliga/2022-2023/sv-werder-bremen-fc-bayern-muenchen-06-05-2023";
-        const fileName = "match.xlsx";
-        const sheetName = "pushnotifications";
+    const options = getRequestOption();
+    options.headers.append('Content-Type', 'application/json');
+    options.method = 'GET';
 
-        const siteResponse = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteUrl}`);
-        const siteData = await siteResponse.json();
-        const siteId = siteData.id;
+    const response = await fetch(`${endpoint}`, options);
 
-        const folderResponse = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/root:/${folderName}`);
-        const folderData = await folderResponse.json();
-        const folderId = folderData.id;
-
-        const fileResponse = await fetch(`https://graph.microsoft.com/v1.0/sites/${siteId}/drive/items/${folderId}:/${fileName}`);
-        const fileData = await fileResponse.json();
-        const fileId = fileData.id;
-
-        const endpoint = `/drives/${siteId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A1:C2')`;
-
-        const requestBody = {
-            values: entries.map((entry) => [entry.id, entry.notify, entry.sent]),
-        };
-
-        validateConnnection();
-
-        const options = getRequestOption();
-        options.method = 'PATCH';
-        options.headers.append('Content-Type', 'application/json');
-        options.body = JSON.stringify(requestBody);
-
-        const response = await fetch(`${graphURL}${endpoint}`, options);
-
-        if (response.ok) {
-            console.log("entries updated");
-            return "updated";
-        }
-
-        throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
-    } catch (error) {
-        console.log('Error:', error);
-        throw error;
+    if (response.ok) {
+        const file = await response.json();
+        return file.id;
     }
+
+    throw new Error(`Could not retrieve file ID. Status: ${response.status}`);
+}
+
+async function addEntriesToExcel(driveId, fileId, sheetName, entryRow, entries) {
+    const lastRow = entryRow + (entries.length - 1);
+    const endpoint = `/drives/${driveId}/items/${fileId}/workbook/worksheets('${sheetName}')/range(address='A${entryRow}:B${lastRow}')`;
+
+    const requestBody = {
+        values: entries.map((entry) => [entry.id, entry.notificationData]),
+    };
+
+    validateConnnection();
+
+    const options = getRequestOption();
+    options.method = 'PATCH';
+    options.headers.append('Content-Type', 'application/json');
+    options.body = JSON.stringify(requestBody);
+
+    const response = await fetch(`${graphURL}${endpoint}`, options);
+
+    if (response.ok) {
+        return response.json();
+    }
+
+    throw new Error(`Could not add entries to Excel file. Status: ${response.status}`);
 }
