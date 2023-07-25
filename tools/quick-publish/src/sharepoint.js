@@ -112,7 +112,7 @@ async function createFolder() {
     });
     const response = await createResponse.json();
     if (createResponse.ok) {
-        console.log("folder is created" + response);
+        console.log("folder is created" + response.id);
     } else {
         throw new Error('Failed to create folder');
     }
