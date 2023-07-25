@@ -98,28 +98,37 @@ export async function PublishAndNotify() {
 
 async function uploadImage() {
     const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
-    const imageResponse = fetch(imageUrl);
-    console.log('here 1');
-    const imageBlob = await imageResponse.blob();
-    console.log('here 2');
-    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/${getImageFileName(imageUrl)}:/content`;
+    //const imageResponse = fetch(imageUrl);
+        fetch(imageUrl)
+            .then( response => response.blob())
+            .then( blobData => {
+                const {size, type} = blobData
+                console.log(` 🌅 IMG Type: ${type} \n 🌌 IMG Size: ${size}`)
+            });
 
-    const uploadResponse = await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': imageBlob.type
-        },
-        body: imageBlob
-    });
-    console.log('here 3');
 
-    if (uploadResponse.ok) {
-        const response = await uploadResponse.json();
-        console.log('Image has been uploaded');
-    } else {
-        console.log('here 4');
-    }
+    //
+    // console.log('here 1');
+    // const imageBlob = await imageResponse.blob();
+    // console.log('here 2');
+    // const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/${getImageFileName(imageUrl)}:/content`;
+    //
+    // const uploadResponse = await fetch(uploadUrl, {
+    //     method: 'PUT',
+    //     headers: {
+    //         'Authorization': `Bearer ${accessToken}`,
+    //         'Content-Type': imageBlob.type
+    //     },
+    //     body: imageBlob
+    // });
+    // console.log('here 3');
+    //
+    // if (uploadResponse.ok) {
+    //     const response = await uploadResponse.json();
+    //     console.log('Image has been uploaded');
+    // } else {
+    //     console.log('here 4');
+    // }
 }
 
 function getImageFileName(imageUrl) {
