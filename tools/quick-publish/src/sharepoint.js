@@ -114,7 +114,7 @@ async function uploadDocumentFile(folderId) {
     });
     if (uploadResponse.ok) {
         const response = await uploadResponse.json();
-        console.log('Document has been uploaded');
+        console.log('Document has been uploaded1');
     } else {
         console.log('here 4');
     }
