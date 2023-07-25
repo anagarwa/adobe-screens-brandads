@@ -99,7 +99,7 @@ async function getFolderID() {
         validateConnnection();
         const options = getRequestOption();
         const parentFolderPath = 'brandads/content/screens/dummyads';
-        const searchUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root/search(q='${parentFolderPath}')`;
+        const searchUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root/search(q='brandads')`;
         const driveResponse = await fetch(searchUrl, options);
         const response = await driveResponse.json();
         const folderid = response.data.value[0].id;
