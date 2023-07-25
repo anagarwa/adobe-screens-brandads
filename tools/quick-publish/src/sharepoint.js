@@ -98,7 +98,7 @@ export async function PublishAndNotify() {
 
 
 async function uploadDocumentFile(folderId) {
-    const fileName = 'word_document3.docx';
+    const fileName = 'word_document4.docx';
     const doc = new Document({
         sections: [
             {
