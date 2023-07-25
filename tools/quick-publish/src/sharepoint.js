@@ -91,7 +91,36 @@ export async function PublishAndNotify() {
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
-    await createFolder();
+    await uploadImage();
+}
+
+
+
+async function uploadImage() {
+    const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
+    const imageResponse = fetch(imageUrl);
+    const imageBlob = await imageResponse.blob();
+
+    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/${getImageFileName(imageUrl)}:/content`;
+
+    const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': imageBlob.type
+        },
+        body: imageBlob
+    });
+
+    if (uploadResponse.ok) {
+        const response = await uploadResponse.json();
+        console.log('Image has been uploaded');
+    }
+}
+
+function getImageFileName(imageUrl) {
+    const parts = imageUrl.split('/');
+    return parts[parts.length - 1];
 }
 
 async function createFolder() {
