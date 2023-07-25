@@ -86,14 +86,29 @@ function getRequestOption() {
 }
 
 export async function PublishAndNotify() {
-    //const quickPublish = await quickpublish();
-    const driveID = await getDriveId();
-    console.log("Drive id is " + driveID);
+    // const quickPublish = await quickpublish();
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
+    await getFolderID();
 }
 
+
+async function getFolderID() {
+    try {
+        validateConnnection();
+        const options = getRequestOption();
+        const parentFolderPath = 'brandads/content/screens/dummyads';
+        const searchUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root/search(q='${parentFolderPath}')`;
+        const driveResponse = await fetch(searchUrl, options);
+        const response = await driveResponse.json();
+        const folderid = response.data.value[0].id;
+        console.log("folder id is " + folderid);
+        return driveId;
+    } catch (error) {
+        throw new Error('Failed to retrieve folder ID');
+    }
+}
 async function quickpublish() {
     console.log('in quick publish8');
     console.log(`Quick Publish Started ${new Date().toLocaleString()}`);
