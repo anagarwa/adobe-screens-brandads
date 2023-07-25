@@ -97,6 +97,7 @@ export async function PublishAndNotify() {
 
 
 async function uploadDocumentFile(folderId) {
+    console.log("Uploading the document");
     const fileName = 'word_document.docx';
     const doc = new Document();
     doc.addParagraph(new Paragraph("Hello, this is a Word document generated using the docx library."));
