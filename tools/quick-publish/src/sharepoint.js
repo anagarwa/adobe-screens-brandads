@@ -1,4 +1,5 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
+import { Document, Paragraph, Packer } from 'docx';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -91,11 +92,34 @@ export async function PublishAndNotify() {
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
-    const folderId = await createFolder();
-    await uploadImage(folderId);
+    await uploadDocumentFile(folderID);
 }
 
 
+async function uploadDocumentFile(folderId) {
+    const fileName = 'word_document.docx';
+    const doc = new Document();
+    doc.addParagraph(new Paragraph("Hello, this is a Word document generated using the docx library."));
+    // Convert the document to a Blob
+    const docBlob = Packer.toBlob(doc);
+    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
+
+    const uploadResponse = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        },
+        body: docBlob
+    });
+    if (uploadResponse.ok) {
+        const response = await uploadResponse.json();
+        console.log('Document has been uploaded');
+    } else {
+        console.log('here 4');
+    }
+
+}
 
 async function uploadImage(folderId) {
     const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
@@ -119,8 +143,6 @@ async function uploadImage(folderId) {
         },
         body: imageBlob
     });
-    console.log('here 3');
-
     if (uploadResponse.ok) {
         const response = await uploadResponse.json();
         console.log('Image has been uploaded');
