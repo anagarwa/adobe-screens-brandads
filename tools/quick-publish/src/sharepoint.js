@@ -3,6 +3,7 @@ import { PublicClientApplication } from './msal-browser-2.14.2.js';
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
 const driveIDGlobal = 'b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1';
+const folderID = '01DF7GY22Q5CGW5CPVAVFKGW62R5XEIQ3X';
 let connectAttempts = 0;
 let accessToken;
 
@@ -90,22 +91,45 @@ export async function PublishAndNotify() {
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
-    await getFolderID();
+    await createFolder();
 }
 
+async function createFolder() {
+    validateConnnection();
+    const folderData = {
+        name: "images",
+        folder: {},
+        "@microsoft.graph.conflictBehavior": "rename"
+    };
+    const createUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}/children`;
+    const createResponse = await fetch(createUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(folderData)
+    });
+
+    if (createResponse.ok) {
+        console.log("folder is created");
+    } else {
+        throw new Error('Failed to create folder');
+    }
+
+}
 
 async function getFolderID() {
     try {
         validateConnnection();
         const options = getRequestOption();
         const parentFolderPath = 'brandads/content/screens/dummyads';
-        //const searchUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root/search(q='brandads/content')`;
         const getByPathUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root:/${parentFolderPath}:/`;
         const driveResponse = await fetch(getByPathUrl, options);
         const response = await driveResponse.json();
         const folderId = response.id;
         console.log("folder id is " + folderId);
-        return driveId;
+        return folderId;
     } catch (error) {
         throw new Error('Failed to retrieve folder ID');
     }
