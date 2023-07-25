@@ -97,9 +97,16 @@ export async function PublishAndNotify() {
 
 
 async function uploadDocumentFile(folderId) {
-    const fileName = 'word_document1.docx';
+    const fileName = 'word_document2.docx';
     const doc = new Document({
         sections: [
+            {
+                properties: {},
+                children: [
+                    new Paragraph("Hello, this is a Word document generated using the docx library."),
+                    new Paragraph("Welcome to SharePoint!")
+                ]
+            }
         ]
     });
 
