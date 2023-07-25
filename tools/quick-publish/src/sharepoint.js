@@ -103,8 +103,8 @@ async function getFolderID() {
         const getByPathUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/root:/${parentFolderPath}:/`;
         const driveResponse = await fetch(getByPathUrl, options);
         const response = await driveResponse.json();
-        const folderid = response.data.value[0].id;
-        console.log("folder id is " + folderid);
+        const folderId = response.id;
+        console.log("folder id is " + folderId);
         return driveId;
     } catch (error) {
         throw new Error('Failed to retrieve folder ID');
