@@ -98,17 +98,16 @@ export async function PublishAndNotify() {
 
 async function uploadImage() {
     const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
-    //const imageResponse = fetch(imageUrl);
-    let imageBlob = null;
-        fetch(imageUrl)
-            .then( response => response.blob())
-            .then( blobData => {
-                const {size, type} = blobData;
-                console.log(` 🌅 IMG Type: ${type} \n 🌌 IMG Size: ${size}`);
-                imageBlob = blobData;
-            });
+    // Download the image from the URL
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+        throw new Error('Failed to download the image.');
+    }
 
-    console.log(` Blob is: ${imageBlob.type} \n 🌌 IMG Size: ${imageBlob.size}`);
+    const imageBlob = await response.blob();
+    const { size, type } = imageBlob;
+    console.log(`IMG Type: ${type}\n🌌 IMG Size: ${size}`);
+
     //
     // console.log('here 1');
     // const imageBlob = await imageResponse.blob();
