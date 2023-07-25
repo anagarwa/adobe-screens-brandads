@@ -99,8 +99,9 @@ export async function PublishAndNotify() {
 async function uploadImage() {
     const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
     const imageResponse = fetch(imageUrl);
+    console.log('here 1');
     const imageBlob = await imageResponse.blob();
-
+    console.log('here 2');
     const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/${getImageFileName(imageUrl)}:/content`;
 
     const uploadResponse = await fetch(uploadUrl, {
@@ -111,10 +112,13 @@ async function uploadImage() {
         },
         body: imageBlob
     });
+    console.log('here 3');
 
     if (uploadResponse.ok) {
         const response = await uploadResponse.json();
         console.log('Image has been uploaded');
+    } else {
+        console.log('here 4');
     }
 }
 
