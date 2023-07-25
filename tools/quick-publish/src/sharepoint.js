@@ -1,5 +1,6 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
 import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
+import { saveAs } from 'file-saver';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -112,22 +113,24 @@ async function uploadDocumentFile(folderId) {
 
     // Convert the document to a Blob
     const docBlob = Packer.toBlob(doc);
-    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
-
-    const uploadResponse = await fetch(uploadUrl, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-        },
-        body: docBlob
-    });
-    if (uploadResponse.ok) {
-        const response = await uploadResponse.json();
-        console.log('Document has been uploaded1');
-    } else {
-        console.log('here 4');
-    }
+    saveAs(docBlob, fileName);
+    
+    // const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
+    //
+    // const uploadResponse = await fetch(uploadUrl, {
+    //     method: 'PUT',
+    //     headers: {
+    //         'Authorization': `Bearer ${accessToken}`,
+    //         'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    //     },
+    //     body: docBlob
+    // });
+    // if (uploadResponse.ok) {
+    //     const response = await uploadResponse.json();
+    //     console.log('Document has been uploaded1');
+    // } else {
+    //     console.log('here 4');
+    // }
 
 }
 
