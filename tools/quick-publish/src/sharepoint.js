@@ -97,18 +97,9 @@ export async function PublishAndNotify() {
 
 
 async function uploadDocumentFile(folderId) {
-    console.log("Uploading the document");
-    const fileName = 'word_document.docx';
+    const fileName = 'word_document1.docx';
     const doc = new Document({
         sections: [
-            {
-                children: [
-                    new Paragraph({
-                        text: "Sample Text",
-                        heading: HeadingLevel.TITLE
-                    }),
-                ]
-            }
         ]
     });
 
