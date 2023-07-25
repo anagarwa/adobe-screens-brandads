@@ -99,14 +99,16 @@ export async function PublishAndNotify() {
 async function uploadImage() {
     const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
     //const imageResponse = fetch(imageUrl);
+    let imageBlob = null;
         fetch(imageUrl)
             .then( response => response.blob())
             .then( blobData => {
-                const {size, type} = blobData
-                console.log(` 🌅 IMG Type: ${type} \n 🌌 IMG Size: ${size}`)
+                const {size, type} = blobData;
+                console.log(` 🌅 IMG Type: ${type} \n 🌌 IMG Size: ${size}`);
+                imageBlob = blobData;
             });
 
-
+    console.log(` Blob is: ${imageBlob.type} \n 🌌 IMG Size: ${imageBlob.size}`);
     //
     // console.log('here 1');
     // const imageBlob = await imageResponse.blob();
