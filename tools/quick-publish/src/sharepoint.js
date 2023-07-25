@@ -1,5 +1,5 @@
 import { PublicClientApplication } from './msal-browser-2.14.2.js';
-import { Document, Paragraph, Packer } from 'docx';
+import { Document, Paragraph, Packer, HeadingLevel } from 'docx';
 
 const graphURL = 'https://graph.microsoft.com/v1.0';
 const baseURI = 'https://graph.microsoft.com/v1.0/drives/b!9IXcorzxfUm_iSmlbQUd2rvx8XA-4zBAvR2Geq4Y2sZTr_1zgLOtRKRA81cvIhG1/root:/fcbayern';
@@ -99,8 +99,19 @@ export async function PublishAndNotify() {
 async function uploadDocumentFile(folderId) {
     console.log("Uploading the document");
     const fileName = 'word_document.docx';
-    const doc = new Document();
-    doc.addParagraph(new Paragraph("Hello, this is a Word document generated using the docx library."));
+    const doc = new Document({
+        sections: [
+            {
+                children: [
+                    new Paragraph({
+                        text: "Sample Text",
+                        heading: HeadingLevel.TITLE
+                    }),
+                ]
+            }
+        ]
+    });
+
     // Convert the document to a Blob
     const docBlob = Packer.toBlob(doc);
     const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
