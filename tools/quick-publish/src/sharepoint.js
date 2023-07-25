@@ -98,7 +98,7 @@ export async function PublishAndNotify() {
 
 
 async function uploadDocumentFile(folderId) {
-    const fileName = 'word_document2.docx';
+    const fileName = 'word_document3.docx';
     const doc = new Document({
         sections: [
             {
@@ -114,7 +114,7 @@ async function uploadDocumentFile(folderId) {
     // Convert the document to a Blob
     const docBlob = Packer.toBlob(doc);
     saveAs(docBlob, fileName);
-    
+
     // const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
     //
     // const uploadResponse = await fetch(uploadUrl, {
