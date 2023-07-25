@@ -91,12 +91,13 @@ export async function PublishAndNotify() {
     // if (quickPublish === 'published') {
     //     return 'updated';
     // }
-    await uploadImage();
+    const folderId = await createFolder();
+    await uploadImage(folderId);
 }
 
 
 
-async function uploadImage() {
+async function uploadImage(folderId) {
     const imageUrl = 'https://raw.githubusercontent.com/anagarwa/adobe-screens-brandads/main/content/dam/ads/mdsrimages/ad4/1.png';
     // Download the image from the URL
     const response = await fetch(imageUrl);
@@ -108,8 +109,7 @@ async function uploadImage() {
     const { size, type } = imageBlob;
     console.log(`IMG1 Type: ${type}\n🌌 IMG Size: ${size}`);
 
-
-    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderID}:/${getImageFileName(imageUrl)}:/content`;
+    const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${getImageFileName(imageUrl)}:/content`;
 
     const uploadResponse = await fetch(uploadUrl, {
         method: 'PUT',
@@ -156,7 +156,7 @@ async function createFolder() {
     } else {
         throw new Error('Failed to create folder');
     }
-
+    return response.id;
 }
 
 async function getFolderID() {
