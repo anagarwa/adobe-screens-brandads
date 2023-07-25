@@ -106,7 +106,7 @@ async function uploadImage() {
 
     const imageBlob = await response.blob();
     const { size, type } = imageBlob;
-    console.log(`IMG Type: ${type}\n🌌 IMG Size: ${size}`);
+    console.log(`IMG1 Type: ${type}\n🌌 IMG Size: ${size}`);
 
     //
     // console.log('here 1');
