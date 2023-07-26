@@ -118,7 +118,8 @@ async function uploadDocumentFile(folderId) {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
     try {
-        const blob = await packer.toBlob(doc);
+        const buffer = await Packer.toBuffer(doc);
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
         saveAs(blob, `first.docx`);
     } catch (error) {
         console.error("Error creating or saving the document:", error);
