@@ -113,10 +113,6 @@ async function uploadDocumentFile(folderId) {
         ],
     });
 
-    // const packer = new Packer();
-    // const mimeType =
-    //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-
     try {
         const buffer = await Packer.toBuffer(doc);
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
