@@ -1,17 +1,15 @@
 
 export default async function decorate(block) {
     const rows = [...block.children];
-    // const img1 = rows[0]?.children[1].innerText.trim();
-    // const img2 = rows[1]?.children[1].innerText.trim();
-    // const img3 = rows[2]?.children[1].innerText.trim();
-    document.removeChild('header');
-    document.removeChild('footer');
-    //block.parentElement.classList.add('default-content-wrapper');
-    //block.textContent = `${img1} and ${img2}`;
+    var header = document.querySelector('header'); // Select the header element
+    if (header) {
+        header.parentNode.removeChild(header); // Remove the header element from its parent node
+    }
 
-   // const carouselContainer = document.getElementById('carousel-container');
-    //const carousel = block.createElement('div');
-    //carousel.classList.add('carousel');
+    var footer = document.querySelector("footer"); // Select the header element
+    if (footer) {
+        footer.parentNode.removeChild(footer); // Remove the header element from its parent node
+    }
 
     rows.forEach((row) => {
         const img = document.createElement('img');
