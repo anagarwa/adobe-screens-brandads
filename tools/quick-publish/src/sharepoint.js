@@ -98,22 +98,33 @@ export async function PublishAndNotify() {
 
 
 async function uploadDocumentFile(folderId) {
-    const fileName = 'word_document4.docx';
-    const doc = new Document({
-        sections: [
-            {
-                properties: {},
-                children: [
-                    new Paragraph("Hello, this is a Word document generated using the docx library."),
-                    new Paragraph("Welcome to SharePoint!")
-                ]
-            }
-        ]
-    });
+    // const fileName = 'word_document4.docx';
+    // const doc = new Document({
+    //     sections: [
+    //         {
+    //             properties: {},
+    //             children: [
+    //                 new Paragraph("Hello, this is a Word document generated using the docx library."),
+    //                 new Paragraph("Welcome to SharePoint!")
+    //             ]
+    //         }
+    //     ]
+    // });
+    //
+    // // Convert the document to a Blob
+    // const docBlob = Packer.toBlob(doc);
+    // saveAs(docBlob, fileName);
 
-    // Convert the document to a Blob
-    const docBlob = Packer.toBlob(doc);
-    saveAs(docBlob, fileName);
+
+    let doc = new Document();
+    doc.createParagraph("This paragraph will be in my new document");
+    const packer = new Packer();
+    const mimeType =
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    packer.toBlob(doc).then(blob => {
+        const docblob = blob.slice(0, blob.size, mimeType);
+        saveAs(docblob, `first.docx`);
+    })
 
     // const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
     //
