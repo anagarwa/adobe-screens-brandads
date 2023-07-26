@@ -98,9 +98,21 @@ export async function PublishAndNotify() {
 
 
 async function uploadDocumentFile(folderId) {
+
+    const doc = new Document({
+        sections: [
+            {
+                properties: {},
+                children: [
+                    new Paragraph({
+                        text: "This paragraph will be in my new document",
+                        heading: HeadingLevel.HEADING_1, // Set appropriate heading level
+                    }),
+                ],
+            },
+        ],
+    });
     
-    let doc = new Document();
-    doc.createParagraph("This paragraph will be in my new document");
     const packer = new Packer();
     const mimeType =
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
