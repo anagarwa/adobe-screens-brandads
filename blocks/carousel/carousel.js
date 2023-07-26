@@ -32,6 +32,6 @@ export default async function decorate(block) {
     }
 
     // Set an interval to automatically show the next image every 3 seconds
-    setInterval(showNextImage, 1000);
+    setInterval(showNextImage, 2000);
 
 }

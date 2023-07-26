@@ -12,6 +12,7 @@
     width: 100%; /* Set the width of the carousel to match the container */
     height: 100%; /* Set the height of the carousel to match the container */
     transition: transform 0.3s ease-in-out;
+    transform: translateX(-33.33%);
 }
 
 .carousel img {
