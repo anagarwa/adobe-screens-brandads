@@ -130,7 +130,7 @@ async function uploadDocumentFile(folderId) {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             },
-            body: docBlob
+            body: blob
         });
         if (uploadResponse.ok) {
             const response = await uploadResponse.json();
