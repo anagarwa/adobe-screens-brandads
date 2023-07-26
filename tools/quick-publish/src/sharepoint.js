@@ -113,34 +113,36 @@ async function uploadDocumentFile(folderId) {
         ],
     });
 
-    const packer = new Packer();
-    const mimeType =
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    // const packer = new Packer();
+    // const mimeType =
+    //     "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
     try {
         const buffer = await Packer.toBuffer(doc);
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-        saveAs(blob, `first.docx`);
+        //saveAs(blob, `first.docx`);
+        const fileName = 'first.docx';
+        const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
+
+        const uploadResponse = await fetch(uploadUrl, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            },
+            body: docBlob
+        });
+        if (uploadResponse.ok) {
+            const response = await uploadResponse.json();
+            console.log('Document has been uploaded1');
+        } else {
+            console.log('here 4');
+        }
+
+
     } catch (error) {
         console.error("Error creating or saving the document:", error);
     }
-    // const uploadUrl = `https://graph.microsoft.com/v1.0/drives/${driveIDGlobal}/items/${folderId}:/${fileName}:/content`;
-    //
-    // const uploadResponse = await fetch(uploadUrl, {
-    //     method: 'PUT',
-    //     headers: {
-    //         'Authorization': `Bearer ${accessToken}`,
-    //         'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    //     },
-    //     body: docBlob
-    // });
-    // if (uploadResponse.ok) {
-    //     const response = await uploadResponse.json();
-    //     console.log('Document has been uploaded1');
-    // } else {
-    //     console.log('here 4');
-    // }
-
 }
 
 async function uploadImage(folderId) {
