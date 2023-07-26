@@ -25,7 +25,7 @@
     "@spectrum-icons/illustrations": "^3.5.0",
     "@spectrum-icons/ui": "^3.3.3",
     "@spectrum-icons/workflow": "^4.0.3",
-    "docx": "^4.7.1",
+    "docx": "^8.2.2",
     "file-saver": "^2.0.5",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
