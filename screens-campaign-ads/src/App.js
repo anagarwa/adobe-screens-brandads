@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -165,12 +166,15 @@ function App() {
   const text3 = 'Dominate the court';
   let jsonObject = {};
 
-  jsonObject.urls = {type:'url', data: ['https://www.sampleurl1.com', 'https://www.sampleurl2.com', 'https://www.sampleurl3.com']};
+  jsonObject.urls = {type:'url', data: ['https://www.nike.com/in/t/air-zoom-pegasus-40-older-road-running-shoes-S0gQ5F/DX2498-600', 'https://www.nike.com/in/t/air-jordan-xxxvii-low-pf-basketball-shoes-7z7ltC', 'https://www.nike.com/in/t/lebron-witness-7-older-basketball-shoes-bV8fWg/DQ8650-100']};
   jsonObject.imageUrls = {type:'imageAndText', data: [{image:image1, text:text1}, {image:image2, text:text2}, {image:image3, text:text3}]};
   jsonObject.campaignImages = {type:'campaign_image', data: [{image:image1, text:''}, {image:image2, text:''}, {image:image3, text:''}]};
   jsonObject.finalImages = {type:'final_image', data: [{image:image1, text:''}, {image:image2, text:''}, {image:image3, text:''}]};
+  jsonObject.modifiedImages = {type:'modified_image', data: []};
+  jsonObject.changedImages = {type:'changed_image', data: []};
 
   const getPromptResponse = (prompt) => {
+
     if(prompt.includes('football')) {
       return jsonObject.urls;
     }
@@ -181,7 +185,7 @@ function App() {
       return jsonObject.campaignImages;
     }
     if(prompt.includes('change')) {
-      return jsonObject.finalImages;
+      return jsonObject.changedImages;
     }
   };
 
@@ -189,24 +193,28 @@ function App() {
     setInputText(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     const inputStr = inputText.trim();
     if (inputStr !== '') {
-      const newMessage = { text: inputText, sender: 'You' };
+      const newMessage = {text: inputText, sender: 'You'};
       setMessages([...messages, newMessage]);
       setInputText('');
 
       setTimeout(() => {
+        promptHandle(inputStr);
         const botReply = {
           text: "I'm a bot. I received your message.",
           sender: 'Bot',
         };
         setMessages((prevMessages) => [...prevMessages, botReply]);
-      }, 800);
+      }, 500);
     }
+  };
+
+  const promptHandle = async (inputStr) => {
     const response = getPromptResponse(inputStr);
     const type = response && response.type;
-    if(type) {
+    if (type) {
       switch (type) {
         case 'url' :
           const urls = jsonObject.urls.data;
@@ -217,17 +225,19 @@ function App() {
           addImageAndTextComponent(imageAndTexts);
           break;
         case 'campaign_image' :
-          const campaignImages = jsonObject.campaignImages.data;
-          addImageAndTextComponent(campaignImages);
+          //const campaignImages = jsonObject.campaignImages.data;
+          const dataArr = await addTextOnImages();
+          jsonObject.modifiedImages.data = dataArr;
+          addImageAndTextComponent(dataArr);
           break;
-        case 'final_image' :
+        case 'change_image' :
           const finalImages = jsonObject.finalImages.data;
           addImageAndTextComponent(finalImages);
           break;
         default:
       }
     }
-  };
+  }
 
   const addImageAndTextComponent = (imageAndTexts) => {
     setDynamicComponents((prev) => [
@@ -256,11 +266,81 @@ function App() {
     ]);
   };
 
-
-
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleSendMessage();
+    }
+  };
+
+  const addTextOnImages = async () => {
+    const arr = [];
+    for (const info of jsonObject.imageUrls.data) {
+      const imageData = await handleImageDownload(info.image);
+      const modifiedImage = await handleUpload(imageData, info.text);
+      arr.push({image:modifiedImage, text:''});
+    }
+    return arr;
+  };
+
+  const handleImageDownload = async (imageUrl) => {
+    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+
+    try {
+      const response = await fetch(proxyUrl + imageUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch image");
+      }
+
+      const blob = await response.blob();
+
+      const dataUrl = await convertBlobToDataURL(blob);
+      console.log('handleImageDownload dataUrl:', dataUrl);
+      return dataUrl;
+    } catch (error) {
+      console.error("handleImageDownload Error fetching image:", error);
+    }
+  };
+
+  const convertBlobToDataURL = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const handleUpload = async (imageData, text) => {
+    try {
+      if (!imageData) {
+        console.error("handleUpload No image selected.");
+        return;
+      }
+      const headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'application/json',
+        'Pragma': 'no-cache',
+      };
+
+      const arr = [imageData, text];
+      const payload = {
+        fn_index: 0,
+        data: arr,
+        event_data: null,
+        session_hash: '8zg3bb7uz3h',
+      };
+
+      const response = await axios.post('http://mdsr-panther:7910/run/predict', payload, { headers });
+
+      const data = response.data.data;
+      console.log('handleUpload response data', data[0]);
+      return data[0];
+    } catch (error) {
+      console.error("handleUpload Error uploading image:", error);
     }
   };
 
