@@ -13,7 +13,7 @@ export default async function decorate(block) {
     block.textContent = '';
     rows.forEach((row) => {
         const img = document.createElement('img');
-        img.src = row.children[1].innerText.trim();;
+        img.src = row.children[1].children[0].href
         img.alt = 'Image';
         block.appendChild(img);
     });
