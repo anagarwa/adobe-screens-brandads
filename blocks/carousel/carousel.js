@@ -19,7 +19,7 @@ export default async function decorate(block) {
     // });
 
     const img = document.createElement('img');
-    img.src = row[0].children[1].children[0].href
+    img.src = rows[0].children[1].children[0].href
     img.alt = 'Image';
     block.appendChild(img);
     let currentIndex = 0;
