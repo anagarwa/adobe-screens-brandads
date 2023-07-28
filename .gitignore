@@ -9,3 +9,5 @@ helix-importer-ui
 .idea
 adobe-screens-brandads.iml
 Screens Innovation Meeting with Michael Marth.pptx
+/screens-campaign-ads/node_modules/
+/screens-campaign-ads/package-lock.json
