@@ -43,6 +43,6 @@ export default async function decorate(block) {
     // }
     //
     // // Set an interval to automatically show the next image every 3 seconds
-    setInterval(displayNextAsset, 1000);
+    setInterval(displayNextAsset, 5000);
 
 }
