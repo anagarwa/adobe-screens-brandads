@@ -11,12 +11,16 @@ export default async function decorate(block) {
         footer.remove();
     }
     block.textContent = '';
-    rows.forEach((row) => {
-        const img = document.createElement('img');
-        img.src = row.children[1].children[0].href
-        img.alt = 'Image';
-        block.appendChild(img);
-    });
+    // rows.forEach((row) => {
+    //     const img = document.createElement('img');
+    //     img.src = row.children[1].children[0].href
+    //     img.alt = 'Image';
+    //     block.appendChild(img);
+    // });
+
+    const img = document.createElement('img');
+    img.src = row[0].children[1].children[0].href
+    img.alt = 'Image';
 
     let currentIndex = 0;
 
