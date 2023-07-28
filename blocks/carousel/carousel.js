@@ -21,21 +21,21 @@ export default async function decorate(block) {
     const img = document.createElement('img');
     img.src = row[0].children[1].children[0].href
     img.alt = 'Image';
-
+    block.appendChild(img);
     let currentIndex = 0;
 
-    // Function to show the next image
-    function showNextImage() {
-        currentIndex = (currentIndex + 1) % rows.length;
-        updateCarousel();
-    }
-
-    // Function to update the carousel position
-    function updateCarousel() {
-        block.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
-
-    // Set an interval to automatically show the next image every 3 seconds
-    setInterval(showNextImage, 2000);
+    // // Function to show the next image
+    // function showNextImage() {
+    //     currentIndex = (currentIndex + 1) % rows.length;
+    //     updateCarousel();
+    // }
+    //
+    // // Function to update the carousel position
+    // function updateCarousel() {
+    //     block.style.transform = `translateX(-${currentIndex * 100}%)`;
+    // }
+    //
+    // // Set an interval to automatically show the next image every 3 seconds
+    // setInterval(showNextImage, 2000);
 
 }
