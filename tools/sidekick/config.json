@@ -8,6 +8,12 @@
       "event": "pushevent"
     },
     {
+      "title": "Preflight",
+      "id": "preflight",
+      "environments": ["preview"],
+      "event": "preflight"
+    },
+    {
       "id": "foo1",
       "title": "quick publish4",
       "event": "foo",
